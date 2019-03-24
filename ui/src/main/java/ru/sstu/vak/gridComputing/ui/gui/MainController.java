@@ -5,9 +5,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sstu.vak.gridComputing.dataFlow.core.DataManager;
@@ -363,6 +365,8 @@ public class MainController implements Initializable {
             alert.setTitle("Ошибка");
             alert.setHeaderText(null);
             alert.setContentText(message);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image("/main.png")); // To add an icon
             alert.showAndWait();
         });
     }
@@ -373,6 +377,8 @@ public class MainController implements Initializable {
             alert.setTitle(title);
             alert.setHeaderText(null);
             alert.setContentText(message);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image("/main.png")); // To add an icon
             alert.showAndWait();
         });
     }
