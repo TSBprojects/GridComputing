@@ -45,19 +45,25 @@ public class ConsoleExecutor {
 
         String outputTmp;
         while ((outputTmp = stdInput.readLine()) != null) {
-            output.append(outputTmp);
+            output.append(outputTmp).append("\n");
+        }
+        if (!output.toString().equals("")) {
+            output = output.replace(output.length() - 1, output.length(), "");
         }
 
         String errorsTmp;
         while ((errorsTmp = stdError.readLine()) != null) {
-            errors.append(errorsTmp);
+            errors.append(errorsTmp).append("\n");
+        }
+        if (!errors.toString().equals("")) {
+            errors = errors.replace(output.length() - 1, output.length(), "");
         }
 
         if (!errors.toString().equals("")) {
             throw new CommandExecutionException(errors.toString());
         }
 
-        return output.toString();
+        return "\n" + output.toString();
     }
 
 }

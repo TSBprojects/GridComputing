@@ -353,6 +353,7 @@ public class MainController implements Initializable {
                     taskResultWaiter.stop();
                     startToggle();
                     resetProgressBar();
+                    printInfoMessage("Stop listening to the result folder.");
                 }
             });
         });
@@ -456,6 +457,21 @@ public class MainController implements Initializable {
                 "$TASK - task file\n" +
                 "$RESULT – result file\n")
         );
+        if (System.getProperty("os.name").contains("Windows")) {
+
+            genDataFileToField.setPromptText("C:\\Data\\");
+            genTasksFilesToField.setPromptText("C:\\Tasks\\");
+            genJobFileToField.setPromptText("C:\\Jobs\\");
+            jarFilePathField.setPromptText("C:\\Programs\\program.jar");
+            addJobCommandField.setPromptText("start broker addjob job.jdf");
+
+        } else {
+            genDataFileToField.setPromptText("/home/user/data/");
+            genTasksFilesToField.setPromptText("/home/user/tasks/");
+            genJobFileToField.setPromptText("/home/user/jobs/");
+            jarFilePathField.setPromptText("/home/user/programs/program.jar");
+            addJobCommandField.setPromptText("bash broker addjob job.jdf");
+        }
     }
 
 

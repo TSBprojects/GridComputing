@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="737.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="791.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
    <children>
       <TabPane layoutY="99.0" prefHeight="439.0" prefWidth="830.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
         <tabs>
@@ -20,16 +20,43 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: DDDDDD;">
                      <children>
-                        <AnchorPane fx:id="adjMatrixPane" layoutY="42.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0" />
-                        <Button fx:id="saveMatrixBtn" layoutX="6.0" layoutY="8.0" mnemonicParsing="false" text="Save data" />
-                        <Button fx:id="loadMatrixBtn" layoutX="80.0" layoutY="8.0" mnemonicParsing="false" text="Load data" />
-                        <Button fx:id="genMatrixBtn" layoutX="388.0" layoutY="8.0" mnemonicParsing="false" text="Generate matrix" AnchorPane.rightAnchor="241.0" />
-                        <TextField fx:id="randOriginField" disable="true" layoutX="611.0" layoutY="8.0" prefHeight="25.0" prefWidth="52.0" promptText="origin" AnchorPane.rightAnchor="67.0" />
-                        <TextField fx:id="randBoundField" disable="true" layoutX="668.0" layoutY="8.0" prefHeight="25.0" prefWidth="52.0" promptText="bound" AnchorPane.rightAnchor="10.0" />
-                        <ToggleButton fx:id="genMatrixRandToggle" layoutX="544.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Random" AnchorPane.rightAnchor="125.0" />
-                        <Button fx:id="enlargeMatrixBtn" layoutX="181.0" layoutY="8.0" mnemonicParsing="false" text="Up matrix" />
-                        <Button fx:id="reduceMatrixBtn" layoutX="256.0" layoutY="8.0" mnemonicParsing="false" text="Down matrix" />
-                        <TextField fx:id="genMatrixSizeField" layoutX="494.0" layoutY="8.0" prefHeight="25.0" prefWidth="37.0" promptText="size" AnchorPane.rightAnchor="199.0" />
+                        <AnchorPane fx:id="adjMatrixPane" layoutY="42.0" prefHeight="252.0" prefWidth="636.0" AnchorPane.bottomAnchor="-22.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0" />
+                        <Button fx:id="saveMatrixBtn" layoutX="6.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Save data" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="8.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></Button>
+                        <Button fx:id="loadMatrixBtn" layoutX="86.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Load data" AnchorPane.leftAnchor="86.0" AnchorPane.topAnchor="8.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></Button>
+                        <Button fx:id="genMatrixBtn" layoutX="392.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Generate matrix" AnchorPane.rightAnchor="253.0" AnchorPane.topAnchor="8.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></Button>
+                        <TextField fx:id="randOriginField" disable="true" layoutX="639.0" layoutY="8.0" prefHeight="25.0" prefWidth="56.0" promptText="origin" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="8.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></TextField>
+                        <TextField fx:id="randBoundField" disable="true" layoutX="668.0" layoutY="8.0" prefHeight="25.0" prefWidth="50.0" promptText="bound" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="8.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></TextField>
+                        <ToggleButton fx:id="genMatrixRandToggle" layoutX="577.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Random" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="8.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></ToggleButton>
+                        <Button fx:id="enlargeMatrixBtn" layoutX="191.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Up matrix" AnchorPane.leftAnchor="191.0" AnchorPane.topAnchor="8.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></Button>
+                        <Button fx:id="reduceMatrixBtn" layoutX="271.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Down matrix" AnchorPane.leftAnchor="271.0" AnchorPane.topAnchor="8.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></Button>
+                        <TextField fx:id="genMatrixSizeField" layoutX="514.0" layoutY="8.0" prefHeight="25.0" prefWidth="50.0" promptText="size" AnchorPane.rightAnchor="196.0" AnchorPane.topAnchor="8.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></TextField>
                      </children>
                   </AnchorPane>
             </content>
@@ -42,7 +69,7 @@
                         <ProgressBar fx:id="porgressBar" layoutX="17.0" layoutY="24.0" prefHeight="18.0" prefWidth="468.0" progress="0.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="17.0" />
                         <Label fx:id="progressBarInfoField" layoutX="18.0" layoutY="6.0" text="Task 0/0">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Consolas" size="14.0" />
                            </font>
                         </Label>
                      </children>
@@ -53,8 +80,14 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: DDDDDD;">
                      <children>
-                        <TextArea fx:id="consoleTextArea" editable="false" layoutX="14.0" layoutY="34.0" prefHeight="291.0" prefWidth="709.0" promptText="Info" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="34.0" />
-                        <Button fx:id="clearConsoleBtn" layoutX="669.0" layoutY="4.0" mnemonicParsing="false" text="cls" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="4.0" />
+                        <TextArea fx:id="consoleTextArea" editable="false" layoutX="14.0" layoutY="34.0" prefHeight="291.0" prefWidth="709.0" promptText="Info" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="34.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></TextArea>
+                        <Button fx:id="clearConsoleBtn" layoutX="739.0" layoutY="5.0" maxHeight="25.0" maxWidth="40.0" minHeight="25.0" minWidth="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" text="cls" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="5.0">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></Button>
                      </children>
                   </AnchorPane>
                </content>
@@ -71,28 +104,40 @@
                                        <children>
                                           <Label layoutX="34.0" layoutY="32.0" text="Data file name:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="dataFileNameField" layoutX="188.0" layoutY="30.0" prefHeight="25.0" prefWidth="164.0" promptText="MyData" />
+                                          <TextField fx:id="dataFileNameField" layoutX="209.0" layoutY="29.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="MyData">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
                                           <Label layoutX="34.0" layoutY="70.0" text="Task file name:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="taskFileNameField" layoutX="188.0" layoutY="68.0" prefHeight="25.0" prefWidth="164.0" promptText="MyTask_" />
+                                          <TextField fx:id="taskFileNameField" layoutX="209.0" layoutY="67.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="MyTask_">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
                                           <Label layoutX="34.0" layoutY="110.0" text="Task result file name:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="taskResFileNameField" disable="true" layoutX="188.0" layoutY="107.0" prefHeight="25.0" prefWidth="164.0" promptText="Task_Result_" />
+                                          <TextField fx:id="taskResFileNameField" disable="true" layoutX="209.0" layoutY="106.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="Task_Result_">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
                                           <Label layoutX="35.0" layoutY="148.0" text="Files extension:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="filesExtensionField" disable="true" layoutX="188.0" layoutY="145.0" prefHeight="25.0" prefWidth="164.0" promptText=".rb" />
+                                          <TextField fx:id="filesExtensionField" disable="true" layoutX="209.0" layoutY="144.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText=".rb">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -103,35 +148,44 @@
                                        <children>
                                           <Label layoutX="34.0" layoutY="30.0" text="Generate data file to:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="genDataFileToField" layoutX="188.0" layoutY="28.0" prefHeight="25.0" prefWidth="164.0" promptText="C:\Data\" text="C:\test" />
-                                          <Button fx:id="genDataFilePathBtn" layoutX="359.0" layoutY="27.0" minHeight="25.0" mnemonicParsing="false" prefHeight="26.0" text="Browser">
+                                          <TextField fx:id="genDataFileToField" layoutX="224.0" layoutY="26.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Data\">
                                              <font>
-                                                <Font size="11.0" />
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Button fx:id="genDataFilePathBtn" layoutX="433.0" layoutY="25.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
                                              </font>
                                           </Button>
                                           <Label layoutX="34.0" layoutY="68.0" text="Generate tasks files to:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="genTasksFilesToField" layoutX="188.0" layoutY="66.0" prefHeight="25.0" prefWidth="164.0" promptText="C:\Tasks\" text="C:\test" />
-                                          <Button fx:id="genTasksFilesPathBtn" layoutX="359.0" layoutY="65.0" minHeight="25.0" mnemonicParsing="false" prefHeight="26.0" text="Browser">
+                                          <TextField fx:id="genTasksFilesToField" layoutX="224.0" layoutY="64.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Tasks\">
                                              <font>
-                                                <Font size="11.0" />
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Button fx:id="genTasksFilesPathBtn" layoutX="433.0" layoutY="64.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
                                              </font>
                                           </Button>
                                           <Label layoutX="34.0" layoutY="106.0" text="Generate job file to:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="genJobFileToField" layoutX="188.0" layoutY="105.0" prefHeight="25.0" prefWidth="163.0" promptText="C:\Jobs\" text="C:\test" />
-                                          <Button fx:id="genJobFileToBtn" layoutX="359.0" layoutY="104.0" minHeight="25.0" mnemonicParsing="false" prefHeight="26.0" text="Browser">
+                                          <TextField fx:id="genJobFileToField" layoutX="224.0" layoutY="103.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Jobs\">
                                              <font>
-                                                <Font size="11.0" />
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Button fx:id="genJobFileToBtn" layoutX="433.0" layoutY="103.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
                                              </font>
                                           </Button>
                                        </children>
@@ -144,40 +198,55 @@
                                        <children>
                                           <Label layoutX="35.0" layoutY="69.0" text="Jar file:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="jarFilePathField" layoutX="166.0" layoutY="66.0" prefHeight="25.0" prefWidth="421.0" promptText="C:\Programs\program.jar" text="C:\test\computeNode-1.0.jar" />
-                                          <Button fx:id="jarFilePathBtn" layoutX="597.0" layoutY="65.0" minHeight="25.0" mnemonicParsing="false" prefHeight="26.0" text="Browser">
+                                          <TextField fx:id="jarFilePathField" layoutX="179.0" layoutY="64.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="412.0" promptText="C:\Programs\program.jar">
                                              <font>
-                                                <Font size="11.0" />
-                                             </font>
-                                          </Button>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
                                           <Label layoutX="35.0" layoutY="126.0" text="Remote command:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="remoteCommandField" layoutX="168.0" layoutY="124.0" prefHeight="25.0" prefWidth="487.0" promptText="java -jar $JAR $DATA $TASK &gt; $RESULT" text="java -jar $JAR $DATA $TASK &gt; $RESULT" />
+                                          <TextField fx:id="remoteCommandField" layoutX="181.0" layoutY="122.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="java -jar $JAR $DATA $TASK &gt; $RESULT" text="java -jar $JAR $DATA $TASK &gt; $RESULT">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
                                           <Label layoutX="35.0" layoutY="30.0" text="Job name:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="jobNameField" layoutX="166.0" layoutY="28.0" prefHeight="25.0" prefWidth="486.0" promptText="MyJob" text="MyJob" />
+                                          <TextField fx:id="jobNameField" layoutX="179.0" layoutY="26.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="MyJob">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
                                           <Label layoutX="35.0" layoutY="204.0" text="Task size:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="taskSizeField" layoutX="168.0" layoutY="201.0" prefHeight="25.0" prefWidth="487.0" promptText="300" text="300" />
+                                          <TextField fx:id="taskSizeField" layoutX="181.0" layoutY="199.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="300">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
                                           <Label layoutX="35.0" layoutY="165.0" text="Add job command:">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="addJobCommandField" layoutX="195.0" layoutY="163.0" prefHeight="25.0" prefWidth="460.0" promptText="bash broker addjob job.jdf" />
-                                          <CheckBox fx:id="consCommCheckBox" layoutX="168.0" layoutY="167.0" mnemonicParsing="false" selected="true" />
+                                          <TextField fx:id="addJobCommandField" layoutX="208.0" layoutY="161.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="460.0" promptText="bash broker addjob job.jdf">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <CheckBox fx:id="consCommCheckBox" layoutX="181.0" layoutY="165.0" mnemonicParsing="false" selected="true" />
+                                          <Button fx:id="jarFilePathBtn" layoutX="598.0" layoutY="64.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
+                                             </font>
+                                          </Button>
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -186,15 +255,18 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label layoutX="35.0" layoutY="33.0" text="The timeout check for the resulting files:">
+                                          <Label layoutX="35.0" layoutY="33.0" text="The timeout check for the resulting files:" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="33.0">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="checkResultTimeoutField" layoutX="292.0" layoutY="31.0" prefHeight="25.0" prefWidth="58.0" promptText="1000" text="1000" />
-                                          <Label layoutX="359.0" layoutY="34.0" text="ms">
+                                          <TextField fx:id="checkResultTimeoutField" layoutX="364.0" layoutY="28.0" minHeight="27.0" prefHeight="27.0" prefWidth="71.0" promptText="1000" AnchorPane.leftAnchor="364.0" AnchorPane.topAnchor="28.0">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Label layoutX="442.0" layoutY="33.0" text="ms" AnchorPane.leftAnchor="442.0" AnchorPane.topAnchor="33.0">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -209,22 +281,25 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Label layoutX="22.0" layoutY="22.0" text="The task of building a route" textFill="WHITE">
+      <Label layoutX="22.0" layoutY="24.0" text="The task of building a route" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="30.0" />
          </font>
       </Label>
-      <TextField fx:id="routeLengthField" layoutX="482.0" layoutY="36.0" prefHeight="25.0" prefWidth="91.0" promptText="Route length" AnchorPane.rightAnchor="157.0" />
-      <Button fx:id="startButton" layoutX="590.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" style="-fx-background-color: F39C63;" text="Start" textFill="WHITE" AnchorPane.rightAnchor="38.0">
+      <TextField fx:id="routeLengthField" layoutX="569.0" layoutY="36.0" maxHeight="28.0" minHeight="28.0" minWidth="94.0" prefHeight="28.0" prefWidth="96.0" promptText="Route length" AnchorPane.rightAnchor="143.0">
+         <font>
+            <Font name="Consolas" size="12.0" />
+         </font></TextField>
+      <Button fx:id="startButton" layoutX="681.0" layoutY="36.0" minHeight="27.0" minWidth="102.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" style="-fx-background-color: F39C63;" text="Start" textFill="WHITE" AnchorPane.rightAnchor="25.0">
          <font>
             <Font name="Kristen ITC" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="stopButton" layoutX="597.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" style="-fx-background-color: red;" text="Stop" textFill="WHITE" visible="false" AnchorPane.rightAnchor="38.0">
+      <Button fx:id="stopButton" layoutX="681.0" layoutY="36.0" minHeight="27.0" minWidth="102.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" style="-fx-background-color: red;" text="Stop" textFill="WHITE" visible="false" AnchorPane.rightAnchor="25.0">
          <font>
             <Font name="Kristen ITC" size="12.0" />
          </font>
       </Button>
-      <ProgressBar fx:id="infinityProgressBar" blendMode="COLOR_DODGE" layoutX="489.0" layoutY="71.0" prefHeight="15.0" prefWidth="210.0" visible="false" AnchorPane.rightAnchor="38.0" />
+      <ProgressBar fx:id="infinityProgressBar" blendMode="COLOR_DODGE" layoutX="552.0" layoutY="74.0" maxHeight="15.0" maxWidth="214.0" minHeight="15.0" minWidth="214.0" prefHeight="15.0" prefWidth="214.0" visible="false" AnchorPane.rightAnchor="25.0" />
    </children>
 </AnchorPane>
