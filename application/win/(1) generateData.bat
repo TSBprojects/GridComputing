@@ -1,0 +1,1 @@
+java -jar ..\distributionNode-1.0.jar 9 4 "..\data" -d

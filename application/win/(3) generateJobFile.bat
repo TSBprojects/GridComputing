@@ -1,0 +1,1 @@
+java -jar ..\distributionNode-1.0.jar "..\data\Data.rb" "..\tasks" MyJob computeNode-1.0 300 -j

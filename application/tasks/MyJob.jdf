@@ -1,0 +1,17 @@
+job :
+  label : MyJob
+task :
+  init :
+    put computeNode-1.0 computeNode-1.0
+    put Data.rb Data.rb
+    put Task_0.rb Task_0.rb
+  remote : java -jar computeNode-1.0 Data.rb Task_0.rb -exec > Task_Result_0.rb
+  final : get Task_Result_0.rb Task_Result_0.rb
+task :
+  init :
+    put computeNode-1.0 computeNode-1.0
+    put Data.rb Data.rb
+    put Task_1.rb Task_1.rb
+  remote : java -jar computeNode-1.0 Data.rb Task_1.rb -exec > Task_Result_1.rb
+  final : get Task_Result_1.rb Task_Result_1.rb
+

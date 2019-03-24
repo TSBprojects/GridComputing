@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/computeNode/computeNode.iml" filepath="$PROJECT_DIR$/computeNode/computeNode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dataFlow/dataFlow.iml" filepath="$PROJECT_DIR$/dataFlow/dataFlow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributionNode/distributionNode.iml" filepath="$PROJECT_DIR$/distributionNode/distributionNode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/owner-parent.iml" filepath="$PROJECT_DIR$/owner-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ui/ui.iml" filepath="$PROJECT_DIR$/ui/ui.iml" />
+    </modules>
+  </component>
+</project>
