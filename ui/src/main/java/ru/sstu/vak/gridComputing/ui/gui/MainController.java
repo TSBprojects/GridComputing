@@ -178,7 +178,8 @@ public class MainController implements Initializable {
 
         initSettings();
 
-        checkResultTimeoutField.textProperty().addListener(getFieldChecker(routeLengthField));
+        taskSizeField.textProperty().addListener(getFieldChecker(taskSizeField));
+        checkResultTimeoutField.textProperty().addListener(getFieldChecker(checkResultTimeoutField));
         routeLengthField.textProperty().addListener(getFieldChecker(routeLengthField));
         randOriginField.textProperty().addListener(getFieldChecker(randOriginField));
         randBoundField.textProperty().addListener(getFieldChecker(randBoundField));
@@ -332,11 +333,9 @@ public class MainController implements Initializable {
 
         startButton.setOnAction(event -> {
             tryIt(() -> {
-                initTasksView();
-
                 if (matrixView != null) {
                     printInfoMessage("Starting computing...");
-
+                    initTasksView();
                     startToggle();
                     resetProgressBar();
 

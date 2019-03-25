@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="791.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="829.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
    <children>
       <TabPane layoutY="99.0" prefHeight="439.0" prefWidth="830.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
         <tabs>
@@ -21,39 +21,39 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: DDDDDD;">
                      <children>
                         <AnchorPane fx:id="adjMatrixPane" layoutY="42.0" prefHeight="252.0" prefWidth="636.0" AnchorPane.bottomAnchor="-22.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0" />
-                        <Button fx:id="saveMatrixBtn" layoutX="6.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Save data" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="8.0">
+                        <Button fx:id="saveMatrixBtn" layoutX="6.0" layoutY="8.0" maxHeight="25.0" maxWidth="80.0" minHeight="25.0" minWidth="80.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Save data" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
                            </font></Button>
-                        <Button fx:id="loadMatrixBtn" layoutX="86.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Load data" AnchorPane.leftAnchor="86.0" AnchorPane.topAnchor="8.0">
+                        <Button fx:id="loadMatrixBtn" layoutX="91.0" layoutY="8.0" maxHeight="25.0" maxWidth="80.0" minHeight="25.0" minWidth="80.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Load data" AnchorPane.leftAnchor="91.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
                            </font></Button>
-                        <Button fx:id="genMatrixBtn" layoutX="392.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Generate matrix" AnchorPane.rightAnchor="253.0" AnchorPane.topAnchor="8.0">
+                        <Button fx:id="genMatrixBtn" layoutX="444.0" layoutY="8.0" maxHeight="25.0" maxWidth="120.0" minHeight="25.0" minWidth="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Generate matrix" AnchorPane.rightAnchor="265.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
                            </font></Button>
-                        <TextField fx:id="randOriginField" disable="true" layoutX="639.0" layoutY="8.0" prefHeight="25.0" prefWidth="56.0" promptText="origin" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="8.0">
+                        <TextField fx:id="randOriginField" disable="true" layoutX="704.0" layoutY="8.0" maxHeight="25.0" maxWidth="56.0" minHeight="25.0" minWidth="56.0" prefHeight="25.0" prefWidth="56.0" promptText="origin" AnchorPane.rightAnchor="69.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
                            </font></TextField>
-                        <TextField fx:id="randBoundField" disable="true" layoutX="668.0" layoutY="8.0" prefHeight="25.0" prefWidth="50.0" promptText="bound" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="8.0">
+                        <TextField fx:id="randBoundField" disable="true" layoutX="668.0" layoutY="8.0" maxHeight="25.0" maxWidth="56.0" minHeight="25.0" minWidth="56.0" prefHeight="25.0" prefWidth="56.0" promptText="bound" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
                            </font></TextField>
-                        <ToggleButton fx:id="genMatrixRandToggle" layoutX="577.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Random" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="8.0">
+                        <ToggleButton fx:id="genMatrixRandToggle" layoutX="630.0" layoutY="8.0" maxHeight="25.0" maxWidth="70.0" minHeight="25.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Random" AnchorPane.rightAnchor="129.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
                            </font></ToggleButton>
-                        <Button fx:id="enlargeMatrixBtn" layoutX="191.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" text="Up matrix" AnchorPane.leftAnchor="191.0" AnchorPane.topAnchor="8.0">
+                        <Button fx:id="enlargeMatrixBtn" layoutX="198.0" layoutY="8.0" maxHeight="25.0" maxWidth="76.0" minHeight="25.0" minWidth="76.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0" text="Up matrix" AnchorPane.leftAnchor="198.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
                            </font></Button>
-                        <Button fx:id="reduceMatrixBtn" layoutX="271.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Down matrix" AnchorPane.leftAnchor="271.0" AnchorPane.topAnchor="8.0">
+                        <Button fx:id="reduceMatrixBtn" layoutX="279.0" layoutY="8.0" maxHeight="25.0" maxWidth="95.0" minHeight="25.0" minWidth="95.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="95.0" text="Down matrix" AnchorPane.leftAnchor="279.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
                            </font></Button>
-                        <TextField fx:id="genMatrixSizeField" layoutX="514.0" layoutY="8.0" prefHeight="25.0" prefWidth="50.0" promptText="size" AnchorPane.rightAnchor="196.0" AnchorPane.topAnchor="8.0">
+                        <TextField fx:id="genMatrixSizeField" layoutX="568.0" layoutY="8.0" maxHeight="25.0" maxWidth="50.0" minHeight="25.0" minWidth="50.0" prefHeight="25.0" prefWidth="50.0" promptText="size" AnchorPane.rightAnchor="211.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
                            </font></TextField>
@@ -210,7 +210,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="remoteCommandField" layoutX="181.0" layoutY="122.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="java -jar $JAR $DATA $TASK &gt; $RESULT" text="java -jar $JAR $DATA $TASK &gt; $RESULT">
+                                          <TextField fx:id="remoteCommandField" layoutX="181.0" layoutY="122.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="Hover over the field for clues" text="java -jar $JAR $DATA $TASK &gt; $RESULT">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
