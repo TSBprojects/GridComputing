@@ -45,7 +45,6 @@ public class TaskResultWaiter {
             @Override
             public void run() {
                 try {
-
                     List<TaskResult> taskRes = readTaskResultFiles(taskResFolderPath);
 
                     for (TaskResult taskResult : taskRes) {
@@ -61,6 +60,7 @@ public class TaskResultWaiter {
 
                     if (currentTaskCount.equals(taskCount)) {
                         callback.onWorkComplete(minRoute);
+                        stop();
                     }
 
                 } catch (IOException e) {

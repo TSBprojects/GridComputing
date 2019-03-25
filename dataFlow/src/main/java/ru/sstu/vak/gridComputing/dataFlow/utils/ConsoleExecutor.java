@@ -56,14 +56,14 @@ public class ConsoleExecutor {
             errors.append(errorsTmp).append("\n");
         }
         if (!errors.toString().equals("")) {
-            errors = errors.replace(output.length() - 1, output.length(), "");
+            errors = errors.replace(errors.length() - 1, errors.length(), "");
         }
 
         if (!errors.toString().equals("")) {
             throw new CommandExecutionException(errors.toString());
         }
 
-        return "\n" + output.toString();
+        return "- COMMAND OUTPUT -\n" + output.toString();
     }
 
 }

@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,7 +33,6 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import static ru.sstu.vak.gridComputing.dataFlow.core.DataManager.readDataFile;
-import static ru.sstu.vak.gridComputing.dataFlow.core.DataManager.writeDataFile;
 import static ru.sstu.vak.gridComputing.dataFlow.utils.MathUtils.genAdjMatrix;
 
 public class MainController implements Initializable {
@@ -128,9 +128,6 @@ public class MainController implements Initializable {
     private TextField jarFilePathField;
 
     @FXML
-    private Button jarFilePathBtn;
-
-    @FXML
     private TextField remoteCommandField;
 
     @FXML
@@ -140,10 +137,16 @@ public class MainController implements Initializable {
     private TextField taskSizeField;
 
     @FXML
-    private TextField addJobCommandField;
+    private TextField prefixCommandField;
 
     @FXML
     private CheckBox consCommCheckBox;
+
+    @FXML
+    private Button jarFilePathBtn;
+
+    @FXML
+    private ProgressIndicator prefCommProgBar;
 
     @FXML
     private TextField checkResultTimeoutField;
@@ -171,6 +174,8 @@ public class MainController implements Initializable {
 
     private BigInteger tasksCount;
 
+    private BigInteger taskSize;
+
     private boolean startToggle = false;
 
     @Override
@@ -187,9 +192,9 @@ public class MainController implements Initializable {
 
         consCommCheckBox.setOnAction(event -> {
             if (consCommCheckBox.isSelected()) {
-                addJobCommandField.setDisable(false);
+                prefixCommandField.setDisable(false);
             } else {
-                addJobCommandField.setDisable(true);
+                prefixCommandField.setDisable(true);
             }
         });
 
@@ -223,15 +228,10 @@ public class MainController implements Initializable {
                 if (folder != null) {
                     printInfoMessage("Folder selected.");
                     tryIt(() -> {
-                        printInfoMessage("Writing data file...");
-                        writeDataFile(
-                                new RouteData(
-                                        matrixView.getAdjMatrix(),
-                                        Integer.parseInt(routeLengthField.getText())
-                                ),
-                                Paths.get(folder.getPath())
-                        );
-                        printInfoMessage("Data file has been written.");
+                        writeDataFile(new RouteData(
+                                matrixView.getAdjMatrix(),
+                                Integer.parseInt(routeLengthField.getText())
+                        ), Paths.get(folder.getPath()));
                     });
                 }
             }
@@ -339,9 +339,16 @@ public class MainController implements Initializable {
                     startToggle();
                     resetProgressBar();
 
-                    generateFiles();
+                    initInputs();
 
-                    addJobToGrid();
+                    writeDataFile(
+                            routeBuilder.getRouteData(),
+                            Paths.get(genDataFileToField.getText())
+                    );
+
+                    writeTaskFiles();
+
+                    executePrefixCommand(writeJobFile());
 
                     setupResultWaiter();
                 }
@@ -418,10 +425,11 @@ public class MainController implements Initializable {
 
 
     private void initRouteBuilder() {
-        this.routeBuilder = new RouteBuilderBase(
+        routeBuilder = new RouteBuilderBase(
                 matrixView.getAdjMatrix(),
                 Integer.parseInt(routeLengthField.getText())
         );
+        tasksCount = routeBuilder.getTaskCount(taskSize);
     }
 
     private void initMatrixView(int[][] adjMatrix) {
@@ -450,49 +458,63 @@ public class MainController implements Initializable {
         taskResFileNameField.setText(DataManager.TASK_RESULT_NAME);
         filesExtensionField.setText(DataManager.FILE_EXTENSION);
         remoteCommandField.setTooltip(new Tooltip("Command example:\n" +
-                "Java -jar $JAR $DATA $TASK > $RESULT\n" +
+                "java -jar $JAR $DATA $TASK > $RESULT\n" +
                 "$JAR - jar file\n" +
                 "$DATA - data file\n" +
                 "$TASK - task file\n" +
                 "$RESULT – result file\n")
         );
+        String jobTooltip;
         if (System.getProperty("os.name").contains("Windows")) {
-
+            jobTooltip = "start broker addjob $JOB";
             genDataFileToField.setPromptText("C:\\Data\\");
             genTasksFilesToField.setPromptText("C:\\Tasks\\");
             genJobFileToField.setPromptText("C:\\Jobs\\");
             jarFilePathField.setPromptText("C:\\Programs\\program.jar");
-            addJobCommandField.setPromptText("start broker addjob job.jdf");
+            prefixCommandField.setPromptText(jobTooltip);
 
         } else {
+            jobTooltip = "bash broker addjob $JOB";
             genDataFileToField.setPromptText("/home/user/data/");
             genTasksFilesToField.setPromptText("/home/user/tasks/");
             genJobFileToField.setPromptText("/home/user/jobs/");
             jarFilePathField.setPromptText("/home/user/programs/program.jar");
-            addJobCommandField.setPromptText("bash broker addjob job.jdf");
+            prefixCommandField.setPromptText(jobTooltip);
         }
+        prefixCommandField.setTooltip(new Tooltip("Command example:\n" +
+                jobTooltip + "\n$JOB - yourJob.jdf file")
+        );
     }
 
 
-    private void generateFiles() throws IOException {
+    private void initInputs() {
         DataManager.DATA_FILE_NAME = dataFileNameField.getText();
         DataManager.TASK_FILE_NAME = taskFileNameField.getText();
-        BigInteger taskSize = new BigInteger(taskSizeField.getText());
-
+        this.taskSize = new BigInteger(taskSizeField.getText());
         initRouteBuilder();
+    }
+
+    private Path writeDataFile(RouteData routeData, Path folderPath) throws IOException {
         printInfoMessage("Writing data file...");
-        writeDataFile(routeBuilder.getRouteData(), Paths.get(genDataFileToField.getText()));
+        Path dataPath = DataManager.writeDataFile(routeData, folderPath);
         printInfoMessage("Data file has been written.");
-        this.tasksCount = routeBuilder.getTaskCount(taskSize);
+
+        return dataPath;
+    }
+
+    private Path writeTaskFiles() throws IOException {
+        Path taskFilesFolder = Paths.get(genTasksFilesToField.getText());
 
         printInfoMessage("Writing task files...");
-        routeBuilder.writeTaskFiles(
-                taskSize,
-                Paths.get(genTasksFilesToField.getText())
-        );
+        routeBuilder.writeTaskFiles(taskSize, taskFilesFolder);
         printInfoMessage("Task files has been written.");
+
+        return taskFilesFolder;
+    }
+
+    private Path writeJobFile() throws IOException {
         printInfoMessage("Writing job file...");
-        routeBuilder.writeJobFile(
+        Path jobPath = routeBuilder.writeJobFile(
                 taskSize,
                 jobNameField.getText(),
                 Paths.get(jarFilePathField.getText()),
@@ -500,19 +522,34 @@ public class MainController implements Initializable {
                 remoteCommandField.getText()
         );
         printInfoMessage("Job has been written.");
+
+        return jobPath;
     }
 
-    private void addJobToGrid() throws IOException {
+    private void executePrefixCommand(Path jobPath) throws IOException {
         if (consCommCheckBox.isSelected()) {
             printInfoMessage("Execute console command...");
-            printInfoMessage(ConsoleExecutor.execute(addJobCommandField.getText()));
+            prefixCommandField.setMaxWidth(426);
+            prefixCommandField.setMinWidth(426);
+            prefCommProgBar.setVisible(true);
+            new Thread(() -> {
+                tryIt(() -> {
+                            String command = prefixCommandField.getText()
+                                    .replace("$JOB", jobPath.toString());
+                            printInfoMessage(ConsoleExecutor.execute(command));
+                        },
+                        () -> {
+                            Platform.runLater(() -> {
+                                prefixCommandField.setMaxWidth(460);
+                                prefixCommandField.setMinWidth(460);
+                                prefCommProgBar.setVisible(false);
+                            });
+                        });
+            }).start();
         }
     }
 
     private void setupResultWaiter() {
-        if (this.routeBuilder == null) {
-            initRouteBuilder();
-        }
 
         taskResultWaiter = new TaskResultWaiter(
                 genJobFileToField.getText(),
@@ -591,7 +628,7 @@ public class MainController implements Initializable {
     }
 
 
-    private void tryIt(Callback callback) {
+    private void tryIt(Try callback, Finally finalExec) {
         try {
             callback.executableCode();
         } catch (Exception e) {
@@ -599,10 +636,22 @@ public class MainController implements Initializable {
             showError(e.getMessage() + " \nSee logs: 'logs.log'");
             startToggle = true;
             startToggle();
+        } finally {
+            if (finalExec != null) {
+                finalExec.executableCode();
+            }
         }
     }
 
-    private interface Callback {
+    private void tryIt(Try callback) {
+        tryIt(callback, null);
+    }
+
+    private interface Try {
         void executableCode() throws Exception;
+    }
+
+    private interface Finally {
+        void executableCode();
     }
 }

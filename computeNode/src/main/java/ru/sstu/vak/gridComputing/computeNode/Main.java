@@ -55,7 +55,7 @@ public class Main {
         RouteTask task = readTaskFile(Paths.get(taskFilePath));
         TaskResult taskResult = taskExecutor.executeTask(task);
 
-        System.out.println(taskResult.getMinRoute().toFileFormat());
+        System.out.println(taskResult.toFileFormat());
     }
 
     private static void executeTask(String dataFilePath, String taskFilePath, String resultFolder)

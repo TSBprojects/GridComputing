@@ -4,6 +4,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="829.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="849.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
    <children>
       <TabPane layoutY="99.0" prefHeight="439.0" prefWidth="830.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
         <tabs>
@@ -210,7 +211,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="remoteCommandField" layoutX="181.0" layoutY="122.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="Hover over the field for clues" text="java -jar $JAR $DATA $TASK &gt; $RESULT">
+                                          <TextField fx:id="remoteCommandField" layoutX="181.0" layoutY="122.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="Hover over the field for clues" text="java -jar $JAR $DATA $TASK -exec &gt; $RESULT">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
@@ -232,12 +233,12 @@
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
-                                          <Label layoutX="35.0" layoutY="165.0" text="Add job command:">
+                                          <Label layoutX="35.0" layoutY="165.0" text="Prefix command:">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="addJobCommandField" layoutX="208.0" layoutY="161.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="460.0" promptText="bash broker addjob job.jdf">
+                                          <TextField fx:id="prefixCommandField" layoutX="208.0" layoutY="161.0" maxHeight="27.0" maxWidth="460.0" minHeight="27.0" minWidth="460.0" prefHeight="27.0" prefWidth="460.0" promptText="bash broker addjob $JOB">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
@@ -247,6 +248,7 @@
                                                 <Font name="Consolas" size="12.0" />
                                              </font>
                                           </Button>
+                                          <ProgressIndicator fx:id="prefCommProgBar" layoutX="646.0" layoutY="164.0" maxHeight="22.0" maxWidth="22.0" minHeight="22.0" minWidth="22.0" prefHeight="22.0" prefWidth="22.0" visible="false" />
                                        </children>
                                     </AnchorPane>
                               </content>
