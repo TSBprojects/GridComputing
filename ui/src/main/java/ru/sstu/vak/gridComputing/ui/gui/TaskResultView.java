@@ -1,7 +1,6 @@
 package ru.sstu.vak.gridComputing.ui.gui;
 
 import javafx.beans.value.ObservableValueBase;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,7 +16,7 @@ public class TaskResultView extends TableView<String[]> {
 
     public TaskResultView() {
         this.setEditable(false);
-        this.completedTasks = FXCollections.observableArrayList();
+        this.completedTasks = new ObservableLinkedList<>();
     }
 
 
