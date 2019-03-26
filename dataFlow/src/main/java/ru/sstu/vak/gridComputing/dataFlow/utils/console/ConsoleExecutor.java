@@ -14,6 +14,9 @@ import static ru.sstu.vak.gridComputing.dataFlow.utils.console.ExecutorCore.pars
 
 public class ConsoleExecutor {
 
+    private ExecutorService executorService;
+    private volatile boolean isInterrupt = false;
+
     private Callback callback;
     private String output;
     private String[] $commands;
@@ -30,18 +33,18 @@ public class ConsoleExecutor {
         this.callback = callback;
 
         $commands = parseCommand(commands);
-        ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         for (String command : parseCommand(commands)) {
-            tasks.add(exec.submit(new RunnableTask(() -> {
+            tasks.add(executorService.submit(new RunnableTask(() -> {
                 try {
                     output += ExecutorCore.execute(command) + "\n";
                 } catch (Exception e) {
                     callback.onException(e);
                 }
             }, () -> {
-                if ($commands.length == completeCommands.addAndGet(1)) {
+                if ($commands.length == completeCommands.addAndGet(1) && !isInterrupt) {
                     callback.onComplete(output);
-                    exec.shutdown();
+                    executorService.shutdown();
                 }
             })));
         }
@@ -49,21 +52,19 @@ public class ConsoleExecutor {
     }
 
     public void stop() {
+        isInterrupt = true;
+        executorService.shutdown();
 
+        boolean sendMess = false;
         for (Future<?> runnableTask : tasks) {
             if (!runnableTask.isDone()) {
+                if (!sendMess) {
+                    callback.onComplete("Command was interrupted!");
+                    sendMess = true;
+                }
                 runnableTask.cancel(true);
-                callback.onComplete("Command was interrupted!");
-                break;
             }
         }
-
-        tasks.forEach(runnableTask -> {
-            if (!runnableTask.isDone()) {
-                runnableTask.cancel(true);
-            }
-        });
-
     }
 
     public interface Callback {
