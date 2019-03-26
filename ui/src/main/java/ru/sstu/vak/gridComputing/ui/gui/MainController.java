@@ -16,7 +16,7 @@ import ru.sstu.vak.gridComputing.dataFlow.core.DataManager;
 import ru.sstu.vak.gridComputing.dataFlow.entity.Route;
 import ru.sstu.vak.gridComputing.dataFlow.entity.RouteData;
 import ru.sstu.vak.gridComputing.dataFlow.entity.TaskResult;
-import ru.sstu.vak.gridComputing.dataFlow.utils.ConsoleExecutor;
+import ru.sstu.vak.gridComputing.dataFlow.utils.console.ConsoleExecutor;
 import ru.sstu.vak.gridComputing.distributionNode.core.RouteBuilder;
 import ru.sstu.vak.gridComputing.distributionNode.core.RouteBuilderBase;
 import ru.sstu.vak.gridComputing.ui.TaskResultWaiter;
@@ -163,6 +163,7 @@ public class MainController implements Initializable {
     @FXML
     private ProgressBar infinityProgressBar;
 
+    private ConsoleExecutor consoleExecutor;
 
     private RouteBuilder routeBuilder;
 
@@ -507,7 +508,7 @@ public class MainController implements Initializable {
 
         printInfoMessage("Writing task files...");
         routeBuilder.writeTaskFiles(taskSize, taskFilesFolder);
-        printInfoMessage("Task files has been written.");
+        printInfoMessage("RunnableTask files has been written.");
 
         return taskFilesFolder;
     }
@@ -528,26 +529,45 @@ public class MainController implements Initializable {
 
     private void executePrefixCommand(Path jobPath) throws IOException {
         if (consCommCheckBox.isSelected()) {
-            printInfoMessage("Execute console command...");
-            prefixCommandField.setMaxWidth(426);
-            prefixCommandField.setMinWidth(426);
-            prefCommProgBar.setVisible(true);
-            new Thread(() -> {
-                tryIt(() -> {
-                            String command = prefixCommandField.getText()
-                                    .replace("$JOB", jobPath.toString());
-                            printInfoMessage(ConsoleExecutor.execute(command));
-                        },
-                        () -> {
-                            Platform.runLater(() -> {
-                                prefixCommandField.setMaxWidth(460);
-                                prefixCommandField.setMinWidth(460);
-                                prefCommProgBar.setVisible(false);
-                            });
-                        });
-            }).start();
+            printInfoMessage("Execute console commands...");
+
+            consoleExecutor = new ConsoleExecutor();
+
+            showCommProgressBar();
+            String commands = prefixCommandField.getText().replace("$JOB", jobPath.toString());
+            consoleExecutor.execute(commands, new ConsoleExecutor.Callback() {
+                @Override
+                public void onComplete(String output) {
+                    Platform.runLater(() -> {
+                        printInfoMessage(output);
+                        hideCommProgressBar();
+                    });
+                }
+
+                @Override
+                public void onException(Exception e) {
+                    Platform.runLater(() -> {
+                        processException(e);
+                        hideCommProgressBar();
+                    });
+                }
+            });
+
         }
     }
+
+    private void hideCommProgressBar() {
+        prefixCommandField.setMaxWidth(460);
+        prefixCommandField.setMinWidth(460);
+        prefCommProgBar.setVisible(false);
+    }
+
+    private void showCommProgressBar() {
+        prefixCommandField.setMaxWidth(426);
+        prefixCommandField.setMinWidth(426);
+        prefCommProgBar.setVisible(true);
+    }
+
 
     private void setupResultWaiter() {
 
@@ -610,6 +630,7 @@ public class MainController implements Initializable {
             startButton.setVisible(true);
             stopButton.setVisible(false);
             infinityProgressBar.setVisible(false);
+            consoleExecutor.stop();
         } else {
             startToggle = true;
             startButton.setVisible(false);

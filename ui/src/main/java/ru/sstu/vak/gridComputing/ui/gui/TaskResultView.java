@@ -77,7 +77,7 @@ public class TaskResultView extends TableView<String[]> {
     private String getName(int columnIndex) {
         switch (columnIndex) {
             case 0: {
-                return "Task#";
+                return "RunnableTask#";
             }
             case 1: {
                 return "Finded minimal path";

@@ -12,12 +12,11 @@ public class ObservableLinkedList<E> implements ObservableList<E> {
 
     @Override
     public void addListener(ListChangeListener<? super E> listener) {
-        throw new UnsupportedOperationException();
+
     }
 
     @Override
     public void removeListener(ListChangeListener<? super E> listener) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -169,11 +168,9 @@ public class ObservableLinkedList<E> implements ObservableList<E> {
 
     @Override
     public void addListener(InvalidationListener listener) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
     public void removeListener(InvalidationListener listener) {
-        throw new UnsupportedOperationException();
     }
 }

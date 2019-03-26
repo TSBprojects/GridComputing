@@ -1,4 +1,4 @@
-package ru.sstu.vak.gridComputing.dataFlow.utils;
+package ru.sstu.vak.gridComputing.dataFlow.utils.console;
 
 import ru.sstu.vak.gridComputing.dataFlow.exception.CommandExecutionException;
 
@@ -6,12 +6,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ConsoleExecutor {
+public class ExecutorCore {
 
-    private ConsoleExecutor() {
+    private ExecutorCore() {
     }
 
-    public static String execute(String command) throws IOException {
+    static String execute(String command) throws IOException {
         if (command.equals("")) {
             throw new CommandExecutionException("Empty console command!");
         }
@@ -23,7 +23,7 @@ public class ConsoleExecutor {
         }
     }
 
-    public static String sudoExecute(String command, String password) throws IOException {
+    static String sudoExecute(String command, String password) throws IOException {
         if (command.equals("") || password.equals("")) {
             throw new CommandExecutionException("Empty console command or password!");
         }
@@ -32,6 +32,15 @@ public class ConsoleExecutor {
 
         return core(Runtime.getRuntime().exec(sudoCommand));
     }
+
+    static String[] parseCommand(String command) {
+        String[] commands = new String[]{command};
+        if (command.contains(";")) {
+            return command.trim().split(";");
+        }
+        return commands;
+    }
+
 
     private static String core(Process p) throws IOException {
         StringBuilder output = new StringBuilder("");
@@ -63,7 +72,6 @@ public class ConsoleExecutor {
             throw new CommandExecutionException(errors.toString());
         }
 
-        return "- COMMAND OUTPUT -\n" + output.toString();
+        return "\n- COMMAND OUTPUT -\n" + output.toString();
     }
-
 }
