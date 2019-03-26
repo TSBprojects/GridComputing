@@ -31,6 +31,8 @@ public class TaskResultWaiter {
         void onTaskComplete(TaskResult taskResult, BigInteger index);
 
         void onWorkComplete(Route minRoute);
+
+        void onException(Exception e);
     }
 
     public TaskResultWaiter(String taskResFolderPath, BigInteger taskCount) {
@@ -64,10 +66,12 @@ public class TaskResultWaiter {
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    callback.onException(e);
+                    stop();
                 } catch (NoResultFileFoundException ignored) {
 
                 }
+
             }
         };
         this.timer.schedule(this.timerTask, delay, delay);

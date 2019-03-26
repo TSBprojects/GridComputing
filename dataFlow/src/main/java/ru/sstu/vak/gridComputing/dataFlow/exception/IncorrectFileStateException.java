@@ -1,6 +1,8 @@
 package ru.sstu.vak.gridComputing.dataFlow.exception;
 
-public class IncorrectFileStateException extends RuntimeException {
+import java.io.IOException;
+
+public class IncorrectFileStateException extends IOException {
     public IncorrectFileStateException() {
         super("Unable to read file!");
     }

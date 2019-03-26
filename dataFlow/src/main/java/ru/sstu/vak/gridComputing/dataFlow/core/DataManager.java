@@ -51,6 +51,9 @@ public class DataManager {
     public static RouteTask readTaskFile(Path filePath) throws IOException {
 
         List<String> taskProps = Files.readAllLines(filePath);
+        if (taskProps.size() < 3) {
+            throw new IncorrectFileStateException();
+        }
 
         Pattern p = Pattern.compile("(\\d+)");
         Matcher mTaskIndex = p.matcher(taskProps.get(0));
@@ -75,6 +78,11 @@ public class DataManager {
     public static RouteData readDataFile(Path filePath) throws IOException {
 
         List<String> data = Files.readAllLines(filePath);
+        if (data.size() < 1) {
+            throw new IncorrectFileStateException();
+        }
+
+
         int routeLength;
         int adjMatrixSize = data.size() - 2;
         int[][] adjMatrix = new int[adjMatrixSize][adjMatrixSize];
@@ -117,6 +125,9 @@ public class DataManager {
     public static Route readRouteFile(Path filePath) throws IOException {
 
         List<String> routeProps = Files.readAllLines(filePath);
+        if (routeProps.size() < 2) {
+            throw new IncorrectFileStateException();
+        }
 
         Pattern p = Pattern.compile("(\\d+)");
         Matcher mWeight = p.matcher(routeProps.get(0));
@@ -140,6 +151,9 @@ public class DataManager {
     public static TaskResult readTaskResultFile(Path filePath) throws IOException {
 
         List<String> routeProps = Files.readAllLines(filePath);
+        if (routeProps.size() < 3) {
+            throw new IncorrectFileStateException();
+        }
 
         Pattern p = Pattern.compile("(\\d+)");
         Matcher mTaskIndex = p.matcher(routeProps.get(0));

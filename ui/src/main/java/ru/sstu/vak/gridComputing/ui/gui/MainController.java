@@ -562,14 +562,18 @@ public class MainController implements Initializable {
             public boolean onTaskReceive(TaskResult taskResult) {
                 boolean isDuplicate = taskResultView.contains(taskResult);
                 if (isDuplicate) {
-                    printInfoMessage("Found duplicate result file!");
+                    printInfoMessage("Found duplicate result file №" +
+                            taskResult.getTaskIndex() + "!");
                 }
                 return !isDuplicate;
             }
 
             @Override
             public void onTaskComplete(TaskResult taskResult, BigInteger index) {
-                printInfoMessage("Found result file.");
+                printInfoMessage("Found result file №" +
+                        taskResult.getTaskIndex() + ". " +
+                        taskResult.getMinRoute()
+                );
                 Platform.runLater(() -> {
                     taskResultView.addTask(taskResult);
                     setProgressBar(
@@ -590,6 +594,11 @@ public class MainController implements Initializable {
                     startToggle();
                     setProgressBar(1, String.format("Tasks %1$s/%1$s", tasksCount));
                 });
+            }
+
+            @Override
+            public void onException(Exception e) {
+                processException(e);
             }
         }, Integer.parseInt(checkResultTimeoutField.getText()));
     }
@@ -632,10 +641,7 @@ public class MainController implements Initializable {
         try {
             callback.executableCode();
         } catch (Exception e) {
-            printErrorMessage(e.getMessage(), e);
-            showError(e.getMessage() + " \nSee logs: 'logs.log'");
-            startToggle = true;
-            startToggle();
+            processException(e);
         } finally {
             if (finalExec != null) {
                 finalExec.executableCode();
@@ -645,6 +651,13 @@ public class MainController implements Initializable {
 
     private void tryIt(Try callback) {
         tryIt(callback, null);
+    }
+
+    private void processException(Exception e) {
+        printErrorMessage(e.getMessage(), e);
+        showError(e.getMessage() + " \nSee logs: 'logs.log'");
+        startToggle = true;
+        startToggle();
     }
 
     private interface Try {
