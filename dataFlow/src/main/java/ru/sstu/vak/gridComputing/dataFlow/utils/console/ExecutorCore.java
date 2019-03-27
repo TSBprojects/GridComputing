@@ -12,10 +12,6 @@ public class ExecutorCore {
     }
 
     static String execute(String command) throws IOException {
-        if (command.equals("")) {
-            throw new CommandExecutionException("Empty console command!");
-        }
-
         if (System.getProperty("os.name").contains("Windows")) {
             return core(Runtime.getRuntime().exec("cmd /c " + command));
         } else {
@@ -24,10 +20,6 @@ public class ExecutorCore {
     }
 
     static String sudoExecute(String command, String password) throws IOException {
-        if (command.equals("") || password.equals("")) {
-            throw new CommandExecutionException("Empty console command or password!");
-        }
-
         String[] sudoCommand = new String[]{"bash", "-c", "echo " + password + "| sudo -S " + command};
 
         return core(Runtime.getRuntime().exec(sudoCommand));

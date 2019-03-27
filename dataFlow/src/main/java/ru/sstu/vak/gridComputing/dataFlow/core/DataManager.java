@@ -26,10 +26,10 @@ public class DataManager {
     public static final String JOB_FILE_EXTENSION = ".jdf";
     public static final String TASK_RESULT_NAME = "Task_Result_";
     public static String JOB_NAME_PATTERN;
+    public static String DATA_NAME_PATTERN;
+    public static String TASK_NAME_PATTERN;
 
     private static String SEPARATOR;
-    private static String DATA_NAME_PATTERN;
-    private static String TASK_NAME_PATTERN;
     private static String TASK_RESULT_NAME_PATTERN;
 
     static {

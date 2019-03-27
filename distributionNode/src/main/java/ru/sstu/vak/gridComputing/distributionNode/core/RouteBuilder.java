@@ -17,12 +17,11 @@ public interface RouteBuilder {
     BigInteger getTaskCount(BigInteger taskSize);
 
 
-    void writeTaskFiles(BigInteger taskSize, Path folderPath);
+    Path writeJobAndTaskFiles(
+            BigInteger taskSize, String jobName, Path jarFilePath,
+            Path dataFilePath, Path tasksFolderPath,
+            Path jobFolderPath, String remoteCommand
 
-    Path writeJobFile(
-            BigInteger taskSize, String jobName,
-            Path jarFilePath, Path folderPath,
-            String remoteCommand
     ) throws IOException;
 
     Route getFinalResult(List<TaskResult> taskResults);

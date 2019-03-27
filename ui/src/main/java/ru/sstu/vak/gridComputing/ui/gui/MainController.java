@@ -182,7 +182,8 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        initSettings();
+        initInputFields();
+        initMatrixViewResize();
 
         taskSizeField.textProperty().addListener(getFieldChecker(taskSizeField));
         checkResultTimeoutField.textProperty().addListener(getFieldChecker(checkResultTimeoutField));
@@ -340,16 +341,16 @@ public class MainController implements Initializable {
                     startToggle();
                     resetProgressBar();
 
-                    initInputs();
+                    initInputValues();
 
-                    writeDataFile(
+                    Path dataPath = writeDataFile(
                             routeBuilder.getRouteData(),
                             Paths.get(genDataFileToField.getText())
                     );
 
-                    writeTaskFiles();
+                    Path jobPath = writeJobAndTaskFiles(dataPath);
 
-                    executePrefixCommand(writeJobFile());
+                    executePrefixCommand(jobPath);
 
                     setupResultWaiter();
                 }
@@ -434,13 +435,32 @@ public class MainController implements Initializable {
     }
 
     private void initMatrixView(int[][] adjMatrix) {
-        matrixView = new MatrixView(adjMatrix);
-        AnchorPane.setBottomAnchor(matrixView, 0d);
+        this.matrixView = new MatrixView(adjMatrix);
         AnchorPane.setLeftAnchor(matrixView, 0d);
-        AnchorPane.setRightAnchor(matrixView, 0d);
+        this.matrixView.setPrefHeight(adjMatrixPane.getHeight());
+        this.matrixView.setPrefWidth(adjMatrixPane.getWidth());
         AnchorPane.setTopAnchor(matrixView, 0d);
         this.adjMatrixPane.getChildren().clear();
         this.adjMatrixPane.getChildren().add(matrixView);
+    }
+
+    private void initMatrixViewResize(){
+        Platform.runLater(() -> {
+            adjMatrixPane.widthProperty().addListener((observable, oldValue, newValue) -> {
+                double newV = (double)newValue;
+                matrixView.setPrefWidth(newV);
+                matrixView.setMinWidth(newV);
+                matrixView.setMinWidth(newV);
+            });
+            adjMatrixPane.heightProperty().addListener((observable, oldValue, newValue) -> {
+                double newV = (double)newValue;
+                matrixView.setPrefHeight(newV);
+                matrixView.setMinHeight(newV);
+                matrixView.setMaxHeight(newV);
+            });
+        });
+
+
     }
 
     private void initTasksView() {
@@ -453,7 +473,7 @@ public class MainController implements Initializable {
         taskResultsPane.getChildren().add(taskResultView);
     }
 
-    private void initSettings() {
+    private void initInputFields() {
         dataFileNameField.setText(DataManager.DATA_FILE_NAME);
         taskFileNameField.setText(DataManager.TASK_FILE_NAME);
         taskResFileNameField.setText(DataManager.TASK_RESULT_NAME);
@@ -488,7 +508,7 @@ public class MainController implements Initializable {
     }
 
 
-    private void initInputs() {
+    private void initInputValues() {
         DataManager.DATA_FILE_NAME = dataFileNameField.getText();
         DataManager.TASK_FILE_NAME = taskFileNameField.getText();
         this.taskSize = new BigInteger(taskSizeField.getText());
@@ -503,31 +523,22 @@ public class MainController implements Initializable {
         return dataPath;
     }
 
-    private Path writeTaskFiles() throws IOException {
-        Path taskFilesFolder = Paths.get(genTasksFilesToField.getText());
-
-        printInfoMessage("Writing task files...");
-        routeBuilder.writeTaskFiles(taskSize, taskFilesFolder);
-        printInfoMessage("RunnableTask files has been written.");
-
-        return taskFilesFolder;
-    }
-
-    private Path writeJobFile() throws IOException {
-        printInfoMessage("Writing job file...");
-        Path jobPath = routeBuilder.writeJobFile(
+    private Path writeJobAndTaskFiles(Path dataFilePath) throws IOException {
+        printInfoMessage("Writing job and task files...");
+        Path jobPath = routeBuilder.writeJobAndTaskFiles(
                 taskSize,
                 jobNameField.getText(),
                 Paths.get(jarFilePathField.getText()),
+                dataFilePath,
+                Paths.get(genTasksFilesToField.getText()),
                 Paths.get(genJobFileToField.getText()),
                 remoteCommandField.getText()
         );
-        printInfoMessage("Job has been written.");
-
+        printInfoMessage("Job and task files has been written.");
         return jobPath;
     }
 
-    private void executePrefixCommand(Path jobPath) throws IOException {
+    private void executePrefixCommand(Path jobPath) {
         if (consCommCheckBox.isSelected()) {
             printInfoMessage("Execute console commands...");
 
@@ -630,7 +641,9 @@ public class MainController implements Initializable {
             startButton.setVisible(true);
             stopButton.setVisible(false);
             infinityProgressBar.setVisible(false);
-            consoleExecutor.stop();
+            if (consoleExecutor != null) {
+                consoleExecutor.stop();
+            }
         } else {
             startToggle = true;
             startButton.setVisible(false);

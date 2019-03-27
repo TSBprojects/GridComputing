@@ -127,9 +127,9 @@ public class Main {
 
     private static void generateTaskFiles(String dataFilePath, String tasksFolder, BigInteger taskSize)
             throws IOException {
-
-        RouteBuilder routeBuilder = new RouteBuilderBase(Paths.get(dataFilePath));
-        routeBuilder.writeTaskFiles(taskSize, Paths.get(tasksFolder));
+        throw new UnsupportedOperationException();
+//        RouteBuilder routeBuilder = new RouteBuilderBase(Paths.get(dataFilePath));
+//        routeBuilder.writeTaskFiles(taskSize, Paths.get(tasksFolder));
     }
 
 
@@ -137,13 +137,13 @@ public class Main {
             String dataFilePath, String jobsFolder,
             String jobName, String jarName, BigInteger taskSize
     ) throws IOException {
-
-        RouteBuilder routeBuilder = new RouteBuilderBase(Paths.get(dataFilePath));
-        routeBuilder.writeJobFile(
-                taskSize, jobName,
-                Paths.get(jarName), Paths.get(jobsFolder),
-                "java -jar $JAR $DATA $TASK > $RESULT"
-        );
+        throw new UnsupportedOperationException();
+//        RouteBuilder routeBuilder = new RouteBuilderBase(Paths.get(dataFilePath));
+//        routeBuilder.writeJobFile(
+//                taskSize, jobName,
+//                Paths.get(jarName), Paths.get(jobsFolder),
+//                "java -jar $JAR $DATA $TASK > $RESULT"
+//        );
     }
 
 }

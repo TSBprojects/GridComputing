@@ -1,5 +1,6 @@
 package ru.sstu.vak.gridComputing.dataFlow.utils.console;
 
+import ru.sstu.vak.gridComputing.dataFlow.exception.CommandExecutionException;
 import ru.sstu.vak.gridComputing.dataFlow.utils.threading.RunnableTask;
 
 import java.io.IOException;
@@ -29,8 +30,12 @@ public class ConsoleExecutor {
         this.completeCommands = new AtomicInteger(0);
     }
 
-    public void execute(String commands, Callback callback) throws IOException {
+    public void execute(String commands, Callback callback) {
         this.callback = callback;
+        if (commands.equals("")) {
+            callback.onException(new CommandExecutionException("Empty console command!"));
+            return;
+        }
 
         $commands = parseCommand(commands);
         executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
@@ -53,7 +58,9 @@ public class ConsoleExecutor {
 
     public void stop() {
         isInterrupt = true;
-        executorService.shutdown();
+        if(executorService != null){
+            executorService.shutdown();
+        }
 
         boolean sendMess = false;
         for (Future<?> runnableTask : tasks) {

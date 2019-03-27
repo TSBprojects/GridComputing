@@ -21,7 +21,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: DDDDDD;">
                      <children>
-                        <AnchorPane fx:id="adjMatrixPane" layoutY="42.0" prefHeight="252.0" prefWidth="636.0" AnchorPane.bottomAnchor="-22.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0" />
+                        <AnchorPane fx:id="adjMatrixPane" layoutY="42.0" prefHeight="252.0" prefWidth="636.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0" />
                         <Button fx:id="saveMatrixBtn" layoutX="6.0" layoutY="8.0" maxHeight="25.0" maxWidth="80.0" minHeight="25.0" minWidth="80.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Save data" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font name="Consolas" size="12.0" />
