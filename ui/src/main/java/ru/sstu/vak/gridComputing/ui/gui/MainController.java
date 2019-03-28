@@ -433,13 +433,15 @@ public class MainController implements Initializable {
     }
 
     private void initTasksView() {
-        taskResultView = new TaskResultView();
-        AnchorPane.setBottomAnchor(taskResultView, 0d);
-        AnchorPane.setLeftAnchor(taskResultView, 0d);
-        AnchorPane.setRightAnchor(taskResultView, 0d);
-        AnchorPane.setTopAnchor(taskResultView, 0d);
-        this.taskResultsPane.getChildren().clear();
-        taskResultsPane.getChildren().add(taskResultView);
+        Platform.runLater(() -> {
+            taskResultView = new TaskResultView();
+            AnchorPane.setBottomAnchor(taskResultView, 0d);
+            AnchorPane.setLeftAnchor(taskResultView, 0d);
+            AnchorPane.setRightAnchor(taskResultView, 0d);
+            AnchorPane.setTopAnchor(taskResultView, 0d);
+            this.taskResultsPane.getChildren().clear();
+            taskResultsPane.getChildren().add(taskResultView);
+        });
     }
 
     private void initInputFields() {
