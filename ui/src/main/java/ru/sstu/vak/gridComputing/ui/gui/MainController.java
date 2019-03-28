@@ -5,20 +5,17 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sstu.vak.gridComputing.dataFlow.core.DataManager;
 import ru.sstu.vak.gridComputing.dataFlow.entity.Route;
 import ru.sstu.vak.gridComputing.dataFlow.entity.RouteData;
-import ru.sstu.vak.gridComputing.dataFlow.entity.TaskResult;
-import ru.sstu.vak.gridComputing.dataFlow.utils.console.ConsoleExecutor;
 import ru.sstu.vak.gridComputing.distributionNode.core.RouteBuilder;
 import ru.sstu.vak.gridComputing.distributionNode.core.RouteBuilderBase;
+import ru.sstu.vak.gridComputing.ui.BrokerStarter;
 import ru.sstu.vak.gridComputing.ui.TaskResultWaiter;
 
 import java.io.File;
@@ -27,10 +24,9 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import static ru.sstu.vak.gridComputing.dataFlow.core.DataManager.readDataFile;
 import static ru.sstu.vak.gridComputing.dataFlow.utils.MathUtils.genAdjMatrix;
@@ -95,16 +91,31 @@ public class MainController implements Initializable {
     private Button clearConsoleBtn;
 
     @FXML
-    private TextField dataFileNameField;
+    private TextField peerDescPathField;
 
     @FXML
-    private TextField taskFileNameField;
+    private TextField brokerPathField;
 
     @FXML
-    private TextField taskResFileNameField;
+    private Button peerDescPathBtn;
 
     @FXML
-    private TextField filesExtensionField;
+    private Button brokerPathBtn;
+
+    @FXML
+    private TextField jarFilePathField;
+
+    @FXML
+    private TextField remoteCommandField;
+
+    @FXML
+    private TextField jobNameField;
+
+    @FXML
+    private Button jarFilePathBtn;
+
+    @FXML
+    private TextField taskSizeField;
 
     @FXML
     private TextField genDataFileToField;
@@ -125,28 +136,16 @@ public class MainController implements Initializable {
     private Button genJobFileToBtn;
 
     @FXML
-    private TextField jarFilePathField;
+    private TextField dataFileNameField;
 
     @FXML
-    private TextField remoteCommandField;
+    private TextField taskFileNameField;
 
     @FXML
-    private TextField jobNameField;
+    private TextField taskResFileNameField;
 
     @FXML
-    private TextField taskSizeField;
-
-    @FXML
-    private TextField prefixCommandField;
-
-    @FXML
-    private CheckBox consCommCheckBox;
-
-    @FXML
-    private Button jarFilePathBtn;
-
-    @FXML
-    private ProgressIndicator prefCommProgBar;
+    private TextField filesExtensionField;
 
     @FXML
     private TextField checkResultTimeoutField;
@@ -163,7 +162,6 @@ public class MainController implements Initializable {
     @FXML
     private ProgressBar infinityProgressBar;
 
-    private ConsoleExecutor consoleExecutor;
 
     private RouteBuilder routeBuilder;
 
@@ -179,9 +177,13 @@ public class MainController implements Initializable {
 
     private boolean startToggle = false;
 
+    private LogHelper logHelper;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        initLogHelper();
         initInputFields();
         initMatrixViewResize();
 
@@ -192,11 +194,26 @@ public class MainController implements Initializable {
         randBoundField.textProperty().addListener(getFieldChecker(randBoundField));
         genMatrixSizeField.textProperty().addListener(getFieldChecker(genMatrixSizeField));
 
-        consCommCheckBox.setOnAction(event -> {
-            if (consCommCheckBox.isSelected()) {
-                prefixCommandField.setDisable(false);
-            } else {
-                prefixCommandField.setDisable(true);
+
+        brokerPathBtn.setOnAction(event -> {
+            logHelper.printInfoMessage("Selecting a broker...");
+            File broker = selectFile("Select broker!");
+            if (broker != null) {
+                brokerPathField.setText(broker.getPath());
+                logHelper.printInfoMessage("Broker selected.");
+            }
+        });
+
+        peerDescPathBtn.setOnAction(event -> {
+            logHelper.printInfoMessage("Selecting a peer description file...");
+            File peerDesc = selectFile(
+                    "Select peer description file!",
+                    "Peer description file (*.gdf)",
+                    "*.gdf"
+            );
+            if (peerDesc != null) {
+                peerDescPathField.setText(peerDesc.getPath());
+                logHelper.printInfoMessage("Peer description file selected.");
             }
         });
 
@@ -205,31 +222,31 @@ public class MainController implements Initializable {
         });
 
         loadMatrixBtn.setOnAction(event -> {
-            printInfoMessage("Selecting data file ...");
+            logHelper.printInfoMessage("Selecting data file ...");
             File data = selectFile(
                     "Select data file!",
                     "Route builder files (*.rb)",
                     "*.rb"
             );
             if (data != null) {
-                printInfoMessage("Data file selected.");
-                tryIt(() -> {
-                    printInfoMessage("Load data file...");
+                logHelper.printInfoMessage("Data file selected.");
+                logHelper.tryIt(() -> {
+                    logHelper.printInfoMessage("Load data file...");
                     RouteData routeData = readDataFile(Paths.get(data.getPath()));
                     this.routeLengthField.setText(String.valueOf(routeData.getRouteLength()));
                     initMatrixView(routeData.getAdjMatrix());
-                    printInfoMessage("Data file has been loaded.");
+                    logHelper.printInfoMessage("Data file has been loaded.");
                 });
             }
         });
 
         saveMatrixBtn.setOnAction(event -> {
             if (matrixView != null) {
-                printInfoMessage("Selecting a folder to save the matrix...");
+                logHelper.printInfoMessage("Selecting a folder to save the matrix...");
                 File folder = selectFolder("Select a folder to save the matrix!");
                 if (folder != null) {
-                    printInfoMessage("Folder selected.");
-                    tryIt(() -> {
+                    logHelper.printInfoMessage("Folder selected.");
+                    logHelper.tryIt(() -> {
                         writeDataFile(new RouteData(
                                 matrixView.getAdjMatrix(),
                                 Integer.parseInt(routeLengthField.getText())
@@ -241,7 +258,7 @@ public class MainController implements Initializable {
 
         enlargeMatrixBtn.setOnAction(event -> {
             if (matrixView != null) {
-                printInfoMessage("Enlarge matrix.");
+                logHelper.printInfoMessage("Enlarge matrix.");
                 if (genMatrixRandToggle.isSelected()) {
                     matrixView.enlargeMatrix(
                             Integer.parseInt(randOriginField.getText()),
@@ -255,7 +272,7 @@ public class MainController implements Initializable {
 
         reduceMatrixBtn.setOnAction(event -> {
             if (matrixView != null) {
-                printInfoMessage("Reduce matrix.");
+                logHelper.printInfoMessage("Reduce matrix.");
                 matrixView.reduceMatrix();
             }
         });
@@ -264,17 +281,17 @@ public class MainController implements Initializable {
             if (genMatrixRandToggle.isSelected()) {
                 randOriginField.setDisable(false);
                 randBoundField.setDisable(false);
-                printInfoMessage("Generate a matrix of random numbers ON");
+                logHelper.printInfoMessage("Generate a matrix of random numbers ON");
             } else {
                 randOriginField.setDisable(true);
                 randBoundField.setDisable(true);
-                printInfoMessage("Generate a matrix of random numbers OFF");
+                logHelper.printInfoMessage("Generate a matrix of random numbers OFF");
             }
         });
 
         genMatrixBtn.setOnAction(event -> {
-            tryIt(() -> {
-                printInfoMessage("Generated matrix...");
+            logHelper.tryIt(() -> {
+                logHelper.printInfoMessage("Generated matrix...");
                 int[][] adjMatrix;
 
                 if (genMatrixRandToggle.isSelected()) {
@@ -289,54 +306,54 @@ public class MainController implements Initializable {
                     );
                 }
                 initMatrixView(adjMatrix);
-                printInfoMessage("Matrix has been generated.");
+                logHelper.printInfoMessage("Matrix has been generated.");
             });
         });
 
         genDataFilePathBtn.setOnAction(event -> {
-            printInfoMessage("Selecting a folder to save the data...");
+            logHelper.printInfoMessage("Selecting a folder to save the data...");
             File file = selectFolder("Choose a place to save the data");
             if (file != null) {
                 genDataFileToField.setText(file.getPath());
-                printInfoMessage("Folder selected.");
+                logHelper.printInfoMessage("Folder selected.");
             }
         });
 
         genTasksFilesPathBtn.setOnAction(event -> {
-            printInfoMessage("Selecting a folder to save tasks...");
+            logHelper.printInfoMessage("Selecting a folder to save tasks...");
             File file = selectFolder("Choose a place to save tasks");
             if (file != null) {
                 genTasksFilesToField.setText(file.getPath());
-                printInfoMessage("Folder selected.");
+                logHelper.printInfoMessage("Folder selected.");
             }
         });
 
         genJobFileToBtn.setOnAction(event -> {
-            printInfoMessage("Selecting a folder to save the job...");
+            logHelper.printInfoMessage("Selecting a folder to save the job...");
             File file = selectFolder("Choose a place to save the job");
             if (file != null) {
                 genJobFileToField.setText(file.getPath());
-                printInfoMessage("Folder selected.");
+                logHelper.printInfoMessage("Folder selected.");
             }
         });
 
         jarFilePathBtn.setOnAction(event -> {
-            printInfoMessage("Selecting a jar file...");
+            logHelper.printInfoMessage("Selecting a jar file...");
             File file = selectFile(
                     "Select jar file!",
                     "Jar file (*.jar)",
                     "*.jar");
             if (file != null) {
                 jarFilePathField.setText(file.getPath());
-                printInfoMessage("Jar file selected.");
+                logHelper.printInfoMessage("Jar file selected.");
             }
         });
 
 
         startButton.setOnAction(event -> {
-            tryIt(() -> {
+            logHelper.tryIt(() -> {
                 if (matrixView != null) {
-                    printInfoMessage("Starting computing...");
+                    logHelper.printInfoMessage("Starting computing...");
                     initTasksView();
                     startToggle();
                     resetProgressBar();
@@ -350,62 +367,61 @@ public class MainController implements Initializable {
 
                     Path jobPath = writeJobAndTaskFiles(dataPath);
 
-                    executePrefixCommand(jobPath);
+                    startBroker(jobPath);
 
                     setupResultWaiter();
                 }
             });
 
             stopButton.setOnAction(event1 -> {
-                if (taskResultWaiter != null) {
-                    taskResultWaiter.stop();
-                    startToggle();
-                    resetProgressBar();
-                    printInfoMessage("Stop listening to the result folder.");
-                }
+
+                startToggle();
+                resetProgressBar();
+                logHelper.printInfoMessage("Stop listening to the result folder.");
+
             });
         });
     }
 
 
-    public static void showError(String message) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка");
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image("/main.png")); // To add an icon
-            alert.showAndWait();
-        });
-    }
-
-    public static void showMessage(String message, String title) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image("/main.png")); // To add an icon
-            alert.showAndWait();
-        });
-    }
-
-    private void printInfoMessage(String mess) {
-        log.info(mess);
-        printMessage(mess);
-    }
-
-    private void printErrorMessage(String mess, Throwable e) {
-        log.error(mess, e);
-        printMessage("- ERROR - " + mess);
-    }
-
-    private void printMessage(String mess) {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        Platform.runLater(() -> consoleTextArea.appendText("[" + dateFormat.format(new Date()) + "] - " + mess + "\n"));
-    }
+//    public static void showError(String message) {
+//        Platform.runLater(() -> {
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Ошибка");
+//            alert.setHeaderText(null);
+//            alert.setContentText(message);
+//            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+//            stage.getIcons().add(new Image("/main.png")); // To add an icon
+//            alert.showAndWait();
+//        });
+//    }
+//
+//    public static void showMessage(String message, String title) {
+//        Platform.runLater(() -> {
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle(title);
+//            alert.setHeaderText(null);
+//            alert.setContentText(message);
+//            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+//            stage.getIcons().add(new Image("/main.png")); // To add an icon
+//            alert.showAndWait();
+//        });
+//    }
+//
+//    private void printInfoMessage(String mess) {
+//        log.info(mess);
+//        printMessage(mess);
+//    }
+//
+//    private void printErrorMessage(String mess, Throwable e) {
+//        log.error(mess, e);
+//        printMessage("- ERROR - " + mess);
+//    }
+//
+//    private void printMessage(String mess) {
+//        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+//        Platform.runLater(() -> consoleTextArea.appendText("[" + dateFormat.format(new Date()) + "] - " + mess + "\n"));
+//    }
 
 
     private File selectFile(String title, String extDesc, String... extensions) {
@@ -416,6 +432,12 @@ public class MainController implements Initializable {
                 extensions
         );
         fileChooser.getExtensionFilters().add(extFilter);
+        return fileChooser.showOpenDialog(null);
+    }
+
+    private File selectFile(String title) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
         return fileChooser.showOpenDialog(null);
     }
 
@@ -444,23 +466,21 @@ public class MainController implements Initializable {
         this.adjMatrixPane.getChildren().add(matrixView);
     }
 
-    private void initMatrixViewResize(){
+    private void initMatrixViewResize() {
         Platform.runLater(() -> {
             adjMatrixPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-                double newV = (double)newValue;
+                double newV = (double) newValue;
                 matrixView.setPrefWidth(newV);
                 matrixView.setMinWidth(newV);
                 matrixView.setMinWidth(newV);
             });
             adjMatrixPane.heightProperty().addListener((observable, oldValue, newValue) -> {
-                double newV = (double)newValue;
+                double newV = (double) newValue;
                 matrixView.setPrefHeight(newV);
                 matrixView.setMinHeight(newV);
                 matrixView.setMaxHeight(newV);
             });
         });
-
-
     }
 
     private void initTasksView() {
@@ -485,28 +505,22 @@ public class MainController implements Initializable {
                 "$TASK - task file\n" +
                 "$RESULT – result file\n")
         );
-        String jobTooltip;
         if (System.getProperty("os.name").contains("Windows")) {
-            jobTooltip = "start broker addjob $JOB";
             genDataFileToField.setPromptText("C:\\Data\\");
             genTasksFilesToField.setPromptText("C:\\Tasks\\");
             genJobFileToField.setPromptText("C:\\Jobs\\");
             jarFilePathField.setPromptText("C:\\Programs\\program.jar");
-            prefixCommandField.setPromptText(jobTooltip);
-
+            brokerPathField.setPromptText("C:\\broker");
+            peerDescPathField.setPromptText("C:\\setPeer.gdf");
         } else {
-            jobTooltip = "bash broker addjob $JOB";
             genDataFileToField.setPromptText("/home/user/data/");
             genTasksFilesToField.setPromptText("/home/user/tasks/");
             genJobFileToField.setPromptText("/home/user/jobs/");
             jarFilePathField.setPromptText("/home/user/programs/program.jar");
-            prefixCommandField.setPromptText(jobTooltip);
+            brokerPathField.setPromptText("/home/user/broker");
+            peerDescPathField.setPromptText("/home/user/setPeer.gdf");
         }
-        prefixCommandField.setTooltip(new Tooltip("Command example:\n" +
-                jobTooltip + "\n$JOB - yourJob.jdf file")
-        );
     }
-
 
     private void initInputValues() {
         DataManager.DATA_FILE_NAME = dataFileNameField.getText();
@@ -515,16 +529,26 @@ public class MainController implements Initializable {
         initRouteBuilder();
     }
 
-    private Path writeDataFile(RouteData routeData, Path folderPath) throws IOException {
-        printInfoMessage("Writing data file...");
-        Path dataPath = DataManager.writeDataFile(routeData, folderPath);
-        printInfoMessage("Data file has been written.");
+    private void initLogHelper() {
+        Platform.runLater(() -> {
+            logHelper = new LogHelper(log, consoleTextArea, "/main.png");
+            logHelper.setOnExceptionListener(() -> {
+                startToggle = true;
+                startToggle();
+            });
+        });
+    }
 
+
+    private Path writeDataFile(RouteData routeData, Path folderPath) throws IOException {
+        logHelper.printInfoMessage("Writing data file...");
+        Path dataPath = DataManager.writeDataFile(routeData, folderPath);
+        logHelper.printInfoMessage("Data file has been written.");
         return dataPath;
     }
 
     private Path writeJobAndTaskFiles(Path dataFilePath) throws IOException {
-        printInfoMessage("Writing job and task files...");
+        logHelper.printInfoMessage("Writing job and task files...");
         Path jobPath = routeBuilder.writeJobAndTaskFiles(
                 taskSize,
                 jobNameField.getText(),
@@ -534,51 +558,103 @@ public class MainController implements Initializable {
                 Paths.get(genJobFileToField.getText()),
                 remoteCommandField.getText()
         );
-        printInfoMessage("Job and task files has been written.");
+        logHelper.printInfoMessage("Job and task files has been written.");
         return jobPath;
     }
 
-    private void executePrefixCommand(Path jobPath) {
-        if (consCommCheckBox.isSelected()) {
-            printInfoMessage("Execute console commands...");
+    private void startBroker(Path jobPath) throws Exception {
+        BrokerStarter brokerStarter = new BrokerStarter();
 
-            consoleExecutor = new ConsoleExecutor();
+        brokerStarter.setCommandOutputListener(new BrokerStarter.Callback() {
+            @Override
+            public void onOutputLineRead(String outputLine) {
+                Platform.runLater(() -> {
+                    String[] consoleLines = consoleTextArea.getText().split("\n");
+                    consoleLines[consoleLines.length - 1] = outputLine;
+                    consoleTextArea.setText(Arrays.stream(consoleLines)
+                            .collect(Collectors.joining("\n")) + "\n");
+                });
+            }
 
-            showCommProgressBar();
-            String commands = prefixCommandField.getText().replace("$JOB", jobPath.toString());
-            consoleExecutor.execute(commands, new ConsoleExecutor.Callback() {
-                @Override
-                public void onComplete(String output) {
-                    Platform.runLater(() -> {
-                        printInfoMessage(output);
-                        hideCommProgressBar();
-                    });
+            @Override
+            public void onJobDone() {
+                Platform.runLater(() -> {
+                    String[] consoleLines = consoleTextArea.getText().split("\n");
+                    String[] completeConsLines = Arrays.copyOf(consoleLines, consoleLines.length - 1);
+                    consoleTextArea.setText(Arrays.stream(completeConsLines)
+                            .collect(Collectors.joining("\n")) + "\n");
+                });
+                try {
+                    Route minRoute = routeBuilder.readTaskResultFiles(
+                            tasksCount, Paths.get(genJobFileToField.getText()),
+                            taskResult -> {
+                                logHelper.printInfoMessage("Read result file №" +
+                                        taskResult.getTaskIndex() + ". " +
+                                        taskResult.getMinRoute()
+                                );
+                                Platform.runLater(() -> {
+                                    taskResultView.addTask(taskResult);
+
+                                });
+                            }
+                    );
+                    String workDone = "Work done! Min route - " + minRoute;
+                    logHelper.printInfoMessage(workDone);
+                    logHelper.showMessage(workDone, "Results");
+                    startToggle();
+                } catch (IOException e) {
+                    logHelper.processException(e);
                 }
+            }
 
-                @Override
-                public void onException(Exception e) {
-                    Platform.runLater(() -> {
-                        processException(e);
-                        hideCommProgressBar();
-                    });
-                }
-            });
+            @Override
+            public void onException(Exception e) {
+                logHelper.processException(e);
+            }
+        });
 
-        }
+        logHelper.printInfoMessage("Launch a broker...");
+        brokerStarter.startAndRunJob(
+                Paths.get(brokerPathField.getText()),
+                Paths.get(peerDescPathField.getText()),
+                jobPath
+        );
+
     }
 
-    private void hideCommProgressBar() {
-        prefixCommandField.setMaxWidth(460);
-        prefixCommandField.setMinWidth(460);
-        prefCommProgBar.setVisible(false);
-    }
-
-    private void showCommProgressBar() {
-        prefixCommandField.setMaxWidth(426);
-        prefixCommandField.setMinWidth(426);
-        prefCommProgBar.setVisible(true);
-    }
-
+//
+//    private void execCommand(String c) throws IOException {
+//
+//        showCommProgressBar();
+//        ConsoleExecutor.execute(c, new ConsoleExecutor.Callback() {
+//            @Override
+//            public void onOutputLineRead(String outputLine) {
+//                Platform.runLater(() -> {
+//                    String[] consoleLines = consoleTextArea.getText().split("\n");
+//                    consoleLines[consoleLines.length-1] = outputLine;
+//                    consoleTextArea.setText(Arrays.stream(consoleLines).collect(Collectors.joining("\n"))+"\n");
+//                });
+//
+////                    logHelper.printInfoMessage(outputLine);
+//            }
+//
+//            @Override
+//            public void onCommandComplete() {
+//                Platform.runLater(() -> {
+//                    String[] consoleLines = consoleTextArea.getText().split("\n");
+//                    String[] completeConsLines = Arrays.copyOf(consoleLines,consoleLines.length-1);
+//                    consoleTextArea.setText(Arrays.stream(completeConsLines).collect(Collectors.joining("\n"))+"\n");
+//                });
+//                hideCommProgressBar();
+//            }
+//
+//            @Override
+//            public void onException(Exception e) {
+//                logHelper.processException(e);
+//                hideCommProgressBar();
+//            }
+//        });
+//    }
 
     private void setupResultWaiter() {
 
@@ -587,40 +663,21 @@ public class MainController implements Initializable {
                 tasksCount
         );
 
-        printInfoMessage("Start listening to the result folder....");
+        logHelper.printInfoMessage("Start listening to the result folder....");
         taskResultWaiter.start(new TaskResultWaiter.Callback() {
             @Override
-            public boolean onTaskReceive(TaskResult taskResult) {
-                boolean isDuplicate = taskResultView.contains(taskResult);
-                if (isDuplicate) {
-                    printInfoMessage("Found duplicate result file №" +
-                            taskResult.getTaskIndex() + "!");
-                }
-                return !isDuplicate;
-            }
-
-            @Override
-            public void onTaskComplete(TaskResult taskResult, BigInteger index) {
-                printInfoMessage("Found result file №" +
-                        taskResult.getTaskIndex() + ". " +
-                        taskResult.getMinRoute()
-                );
+            public void onTimeoutTick(BigInteger resultsCount) {
+                logHelper.printInfoMessage("Found loading result file.");
                 Platform.runLater(() -> {
-                    taskResultView.addTask(taskResult);
                     setProgressBar(
-                            index.doubleValue() / tasksCount.doubleValue(),
-                            String.format("Tasks %1$s/%2$s", index, tasksCount)
+                            resultsCount.doubleValue() / tasksCount.doubleValue(),
+                            String.format("Tasks %1$s/%2$s", resultsCount, tasksCount)
                     );
                 });
             }
 
             @Override
-            public void onWorkComplete(Route minRoute) {
-                printInfoMessage("Work done! Min route - " + minRoute);
-                showMessage(
-                        "Work done!\nMin route - " + minRoute,
-                        "Results"
-                );
+            public void onAllResultsExist() {
                 Platform.runLater(() -> {
                     startToggle();
                     setProgressBar(1, String.format("Tasks %1$s/%1$s", tasksCount));
@@ -629,11 +686,55 @@ public class MainController implements Initializable {
 
             @Override
             public void onException(Exception e) {
-                processException(e);
+                logHelper.processException(e);
             }
         }, Integer.parseInt(checkResultTimeoutField.getText()));
     }
 
+
+//    new TaskResultWaiter.Callback() {
+//        @Override
+//        public boolean onTaskReceive(TaskResult taskResult) {
+//            boolean isDuplicate = taskResultView.contains(taskResult);
+//            if (isDuplicate) {
+//                logHelper.printInfoMessage("Found duplicate result file №" +
+//                        taskResult.getTaskIndex() + "!");
+//            }
+//            return !isDuplicate;
+//        }
+//
+//        @Override
+//        public void onTaskComplete(TaskResult taskResult, BigInteger index) {
+//            logHelper.printInfoMessage("Found result file №" +
+//                    taskResult.getTaskIndex() + ". " +
+//                    taskResult.getMinRoute()
+//            );
+//            Platform.runLater(() -> {
+//                taskResultView.addTask(taskResult);
+//                setProgressBar(
+//                        index.doubleValue() / tasksCount.doubleValue(),
+//                        String.format("Tasks %1$s/%2$s", index, tasksCount)
+//                );
+//            });
+//        }
+//
+//        @Override
+//        public void onWorkComplete(Route minRoute) {
+//            String workDone = "Work done! Min route - " + minRoute;
+//            logHelper.printInfoMessage(workDone);
+//            logHelper.showMessage(workDone, "Results");
+//            Platform.runLater(() -> {
+//                startToggle();
+//                setProgressBar(1, String.format("Tasks %1$s/%1$s", tasksCount));
+//            });
+//        }
+//
+//        @Override
+//        public void onException(Exception e) {
+//            logHelper.processException(e);
+//        }
+//    }
+//
 
     private void startToggle() {
         if (startToggle) {
@@ -641,8 +742,8 @@ public class MainController implements Initializable {
             startButton.setVisible(true);
             stopButton.setVisible(false);
             infinityProgressBar.setVisible(false);
-            if (consoleExecutor != null) {
-                consoleExecutor.stop();
+            if (taskResultWaiter != null) {
+                taskResultWaiter.stop();
             }
         } else {
             startToggle = true;
@@ -670,35 +771,35 @@ public class MainController implements Initializable {
         };
     }
 
-
-    private void tryIt(Try callback, Finally finalExec) {
-        try {
-            callback.executableCode();
-        } catch (Exception e) {
-            processException(e);
-        } finally {
-            if (finalExec != null) {
-                finalExec.executableCode();
-            }
-        }
-    }
-
-    private void tryIt(Try callback) {
-        tryIt(callback, null);
-    }
-
-    private void processException(Exception e) {
-        printErrorMessage(e.getMessage(), e);
-        showError(e.getMessage() + " \nSee logs: 'logs.log'");
-        startToggle = true;
-        startToggle();
-    }
-
-    private interface Try {
-        void executableCode() throws Exception;
-    }
-
-    private interface Finally {
-        void executableCode();
-    }
+//
+//    private void tryIt(Try callback, Finally finalExec) {
+//        try {
+//            callback.executableCode();
+//        } catch (Exception e) {
+//            processException(e);
+//        } finally {
+//            if (finalExec != null) {
+//                finalExec.executableCode();
+//            }
+//        }
+//    }
+//
+//    private void tryIt(Try callback) {
+//        tryIt(callback, null);
+//    }
+//
+//    private void processException(Exception e) {
+//        printErrorMessage(e.getMessage(), e);
+//        showError(e.getMessage() + " \nSee logs: 'logs.log'");
+//        startToggle = true;
+//        startToggle();
+//    }
+//
+//    private interface Try {
+//        void executableCode() throws Exception;
+//    }
+//
+//    private interface Finally {
+//        void executableCode();
+//    }
 }

@@ -3,81 +3,90 @@ package ru.sstu.vak.gridComputing.dataFlow.utils.console;
 import ru.sstu.vak.gridComputing.dataFlow.exception.CommandExecutionException;
 import ru.sstu.vak.gridComputing.dataFlow.utils.threading.RunnableTask;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static ru.sstu.vak.gridComputing.dataFlow.utils.console.ExecutorCore.parseCommand;
+import java.util.stream.Collectors;
 
 public class ConsoleExecutor {
 
-    private ExecutorService executorService;
-    private volatile boolean isInterrupt = false;
-
-    private Callback callback;
-    private String output;
-    private String[] $commands;
-    private List<Future<?>> tasks;
-    private AtomicInteger completeCommands;
-
-    public ConsoleExecutor() {
-        this.output = "";
-        this.tasks = new ArrayList<>();
-        this.completeCommands = new AtomicInteger(0);
+    private ConsoleExecutor() {
     }
 
-    public void execute(String commands, Callback callback) {
-        this.callback = callback;
-        if (commands.equals("")) {
-            callback.onException(new CommandExecutionException("Empty console command!"));
-            return;
+    public static void execute(String command, Callback callback) throws IOException {
+        if (System.getProperty("os.name").contains("Windows")) {
+            core(Runtime.getRuntime().exec("cmd /c " + command), callback);
+        } else {
+            core(Runtime.getRuntime().exec(command), callback);
         }
-
-        $commands = parseCommand(commands);
-        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        for (String command : parseCommand(commands)) {
-            tasks.add(executorService.submit(new RunnableTask(() -> {
-                try {
-                    output += ExecutorCore.execute(command) + "\n";
-                } catch (Exception e) {
-                    callback.onException(e);
-                }
-            }, () -> {
-                if ($commands.length == completeCommands.addAndGet(1) && !isInterrupt) {
-                    callback.onComplete(output);
-                    executorService.shutdown();
-                }
-            })));
-        }
-
     }
 
-    public void stop() {
-        isInterrupt = true;
-        if(executorService != null){
-            executorService.shutdown();
-        }
+    public static void sudoExecute(String command, String password, Callback callback) throws IOException {
+        String[] sudoCommand = new String[]{"bash", "-c", "echo " + password + "| sudo -S " + command};
 
-        boolean sendMess = false;
-        for (Future<?> runnableTask : tasks) {
-            if (!runnableTask.isDone()) {
-                if (!sendMess) {
-                    callback.onComplete("Command was interrupted!");
-                    sendMess = true;
+        core(Runtime.getRuntime().exec(sudoCommand), callback);
+    }
+
+    public static String[] parseCommand(String command) {
+        String[] commands = new String[]{command.trim()};
+        if (command.contains(";")) {
+
+            List<String> commandList = Arrays.stream(command.trim().split(";"))
+                    .map(String::trim)
+                    .collect(Collectors.toList());
+
+            return commandList.toArray(new String[commandList.size()]);
+        }
+        return commands;
+    }
+
+
+    private static void core(Process p, Callback callback) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(new RunnableTask(() -> {
+
+            StringBuilder errors = new StringBuilder("");
+
+            BufferedReader stdInput = new BufferedReader(
+                    new InputStreamReader((p.getInputStream())));
+
+            BufferedReader stdError = new BufferedReader(
+                    new InputStreamReader((p.getErrorStream())));
+
+            String outputTmp;
+            String errorsTmp;
+            StringBuilder result = new StringBuilder("- COMMAND OUTPUT -\n");
+            try {
+                while ((outputTmp = stdInput.readLine()) != null) {
+                    result.append(outputTmp).append("\nCommand executed....");
+                    callback.onOutputLineRead(result.toString());
+                    result = new StringBuilder("");
                 }
-                runnableTask.cancel(true);
+                while ((errorsTmp = stdError.readLine()) != null) {
+                    errors.append(errorsTmp).append("\n");
+                }
+                if (!errors.toString().equals("")) {
+                    errors = errors.replace(errors.length() - 1, errors.length(), "");
+                    callback.onException(new CommandExecutionException(errors.toString()));
+                }
+            } catch (IOException e) {
+                callback.onException(e);
             }
-        }
+
+        }, callback::onCommandComplete));
+
+        executorService.shutdown();
     }
 
     public interface Callback {
-        void onComplete(String output);
+        void onOutputLineRead(String outputLine);
+
+        void onCommandComplete();
 
         void onException(Exception e);
     }
-
 }

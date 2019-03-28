@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
@@ -13,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="849.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="773.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
    <children>
       <TabPane layoutY="99.0" prefHeight="439.0" prefWidth="830.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
         <tabs>
@@ -99,6 +97,144 @@
                      <children>
                         <TabPane prefHeight="377.0" prefWidth="542.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <tabs>
+                              <Tab text="Start broker">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="35.0" layoutY="69.0" text="Peer description file:">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="peerDescPathField" layoutX="213.0" layoutY="63.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="387.0" promptText="/home/user/setPeer.gdf" text="/home/anton/mygrid/setPeer.gdf">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </TextField>
+                                          <Label layoutX="35.0" layoutY="30.0" text="Broker:">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="brokerPathField" layoutX="213.0" layoutY="25.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="387.0" promptText="/home/user/broker" text="/home/anton/mygrid/bin/mygrid">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </TextField>
+                                          <Button fx:id="peerDescPathBtn" layoutX="611.0" layoutY="63.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="brokerPathBtn" layoutX="611.0" layoutY="24.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                            <Tab text="Generate job">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="35.0" layoutY="69.0" text="Jar file:">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="jarFilePathField" layoutX="179.0" layoutY="64.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="412.0" promptText="C:\Programs\program.jar" text="/home/anton/GridСomputing/test/computeNode-1.0.jar">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Label layoutX="35.0" layoutY="126.0" text="Remote command:">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="remoteCommandField" layoutX="181.0" layoutY="122.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="Hover over the field for clues" text="java -jar $JAR $DATA $TASK -exec &gt; $RESULT">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Label layoutX="35.0" layoutY="30.0" text="Job name:">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="jobNameField" layoutX="179.0" layoutY="26.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="MyJob" text="sd">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Button fx:id="jarFilePathBtn" layoutX="598.0" layoutY="64.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
+                                             </font>
+                                          </Button>
+                                          <Label layoutX="35.0" layoutY="167.0" text="Task size:">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="taskSizeField" layoutX="181.0" layoutY="162.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="300" text="300">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                              <Tab text="Generate files">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="34.0" layoutY="30.0" text="Generate data file to:">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="genDataFileToField" layoutX="224.0" layoutY="26.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Data\" text="/home/anton/GridСomputing">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Button fx:id="genDataFilePathBtn" layoutX="433.0" layoutY="25.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
+                                             </font>
+                                          </Button>
+                                          <Label layoutX="34.0" layoutY="68.0" text="Generate tasks files to:">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="genTasksFilesToField" layoutX="224.0" layoutY="64.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Tasks\" text="/home/anton/GridСomputing">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Button fx:id="genTasksFilesPathBtn" layoutX="433.0" layoutY="64.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
+                                             </font>
+                                          </Button>
+                                          <Label layoutX="34.0" layoutY="106.0" text="Generate job file to:">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="genJobFileToField" layoutX="224.0" layoutY="103.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Jobs\" text="/home/anton/GridСomputing/test">
+                                             <font>
+                                                <Font name="Consolas" size="14.0" />
+                                             </font></TextField>
+                                          <Button fx:id="genJobFileToBtn" layoutX="433.0" layoutY="103.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Browser">
+                                             <font>
+                                                <Font name="Consolas" size="12.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
                             <Tab text="File's name">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="262.0" prefWidth="303.0">
@@ -143,116 +279,6 @@
                                     </AnchorPane>
                               </content>
                             </Tab>
-                              <Tab text="Paths">
-                                 <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <Label layoutX="34.0" layoutY="30.0" text="Generate data file to:">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="genDataFileToField" layoutX="224.0" layoutY="26.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Data\">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font></TextField>
-                                          <Button fx:id="genDataFilePathBtn" layoutX="433.0" layoutY="25.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Browser">
-                                             <font>
-                                                <Font name="Consolas" size="12.0" />
-                                             </font>
-                                          </Button>
-                                          <Label layoutX="34.0" layoutY="68.0" text="Generate tasks files to:">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="genTasksFilesToField" layoutX="224.0" layoutY="64.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Tasks\">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font></TextField>
-                                          <Button fx:id="genTasksFilesPathBtn" layoutX="433.0" layoutY="64.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Browser">
-                                             <font>
-                                                <Font name="Consolas" size="12.0" />
-                                             </font>
-                                          </Button>
-                                          <Label layoutX="34.0" layoutY="106.0" text="Generate job file to:">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="genJobFileToField" layoutX="224.0" layoutY="103.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Jobs\">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font></TextField>
-                                          <Button fx:id="genJobFileToBtn" layoutX="433.0" layoutY="103.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Browser">
-                                             <font>
-                                                <Font name="Consolas" size="12.0" />
-                                             </font>
-                                          </Button>
-                                       </children>
-                                    </AnchorPane>
-                                 </content>
-                              </Tab>
-                            <Tab text="Generate job">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <Label layoutX="35.0" layoutY="69.0" text="Jar file:">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="jarFilePathField" layoutX="179.0" layoutY="64.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="412.0" promptText="C:\Programs\program.jar">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font></TextField>
-                                          <Label layoutX="35.0" layoutY="126.0" text="Remote command:">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="remoteCommandField" layoutX="181.0" layoutY="122.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="Hover over the field for clues" text="java -jar $JAR $DATA $TASK -exec &gt; $RESULT">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font></TextField>
-                                          <Label layoutX="35.0" layoutY="30.0" text="Job name:">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="jobNameField" layoutX="179.0" layoutY="26.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="MyJob">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font></TextField>
-                                          <Label layoutX="35.0" layoutY="204.0" text="Task size:">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="taskSizeField" layoutX="181.0" layoutY="199.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="300">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font></TextField>
-                                          <Label layoutX="35.0" layoutY="165.0" text="Prefix command:">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="prefixCommandField" layoutX="208.0" layoutY="161.0" maxHeight="27.0" maxWidth="460.0" minHeight="27.0" minWidth="460.0" prefHeight="27.0" prefWidth="460.0" promptText="bash broker addjob $JOB">
-                                             <font>
-                                                <Font name="Consolas" size="14.0" />
-                                             </font></TextField>
-                                          <CheckBox fx:id="consCommCheckBox" layoutX="181.0" layoutY="165.0" mnemonicParsing="false" selected="true" />
-                                          <Button fx:id="jarFilePathBtn" layoutX="598.0" layoutY="64.0" maxHeight="27.0" maxWidth="70.0" minHeight="27.0" minWidth="70.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="70.0" text="Browser">
-                                             <font>
-                                                <Font name="Consolas" size="12.0" />
-                                             </font>
-                                          </Button>
-                                          <ProgressIndicator fx:id="prefCommProgBar" layoutX="646.0" layoutY="164.0" maxHeight="22.0" maxWidth="22.0" minHeight="22.0" minWidth="22.0" prefHeight="22.0" prefWidth="22.0" visible="false" />
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
                               <Tab text="Receive result">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -262,7 +288,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="checkResultTimeoutField" layoutX="364.0" layoutY="28.0" minHeight="27.0" prefHeight="27.0" prefWidth="71.0" promptText="1000" AnchorPane.leftAnchor="364.0" AnchorPane.topAnchor="28.0">
+                                          <TextField fx:id="checkResultTimeoutField" layoutX="364.0" layoutY="28.0" minHeight="27.0" prefHeight="27.0" prefWidth="71.0" promptText="1000" text="1000" AnchorPane.leftAnchor="364.0" AnchorPane.topAnchor="28.0">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>

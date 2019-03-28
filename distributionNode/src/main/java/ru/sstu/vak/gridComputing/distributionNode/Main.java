@@ -100,10 +100,10 @@ public class Main {
 
     private static Route getTasksResult(String dataFilePath, String resultsFolderPath)
             throws IOException {
-
-        RouteBuilder routeBuilder = new RouteBuilderBase(Paths.get(dataFilePath));
-        List<TaskResult> taskResults = readTaskResultFiles(Paths.get(resultsFolderPath));
-        return routeBuilder.getFinalResult(taskResults);
+        throw new UnsupportedOperationException();
+//        RouteBuilder routeBuilder = new RouteBuilderBase(Paths.get(dataFilePath));
+//        List<TaskResult> taskResults = readTaskResultFiles(Paths.get(resultsFolderPath));
+//        return routeBuilder.getFinalResult(taskResults);
     }
 
     private static void generateDataFile(int adjMatrixSize, int routeLength, String dataFolder)

@@ -40,6 +40,22 @@ public class RouteBuilderBase implements RouteBuilder {
     }
 
 
+    public Route readTaskResultFiles(
+            BigInteger taskCount,
+            Path folderPath,
+            Consumer<TaskResult> iterator
+    ) throws IOException {
+        this.minRoute = initMinRoute();
+
+        resultIterator(taskCount, folderPath, path -> {
+            TaskResult taskResult = readTaskResultFile(path);
+            minRouteFinder(taskResult.getMinRoute());
+            iterator.accept(taskResult);
+        });
+
+        return minRoute;
+    }
+
     @Override
     public RouteData getRouteData() {
         return new RouteData(adjMatrix, routeLength);
@@ -59,82 +75,21 @@ public class RouteBuilderBase implements RouteBuilder {
         Path jobFilePath = Paths.get(String.format(JOB_NAME_PATTERN, jobFolderPath, jobName));
         writeFile(jobFilePath, job.toString(), "UTF-8");
         taskIterator(routeTask -> {
-            try {
-                Path taskPath = writeTaskFile(routeTask, tasksFolderPath);
-                Files.write(
-                        jobFilePath,
-                        new JobTask(
-                                jarFilePath,
-                                dataFilePath,
-                                taskPath,
-                                TASK_RESULT_NAME + routeTask.getTaskIndex() + FILE_EXTENSION,
-                                remoteCommand
-                        ).toString().getBytes(),
-                        StandardOpenOption.APPEND
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Path taskPath = writeTaskFile(routeTask, tasksFolderPath);
+            Files.write(
+                    jobFilePath,
+                    new JobTask(
+                            jarFilePath,
+                            dataFilePath,
+                            taskPath,
+                            TASK_RESULT_NAME + routeTask.getTaskIndex() + FILE_EXTENSION,
+                            remoteCommand
+                    ).toString().getBytes(),
+                    StandardOpenOption.APPEND
+            );
         });
 
         return jobFilePath;
-    }
-
-//    @Override
-//    public void writeTaskFiles(BigInteger taskSize, Path folderPath) {
-//        this.taskSize = taskSize;
-//
-//        taskIterator(routeTask -> {
-//            try {
-//                writeTaskFile(routeTask, folderPath);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public Path writeJobFile(
-//            BigInteger taskSize, String jobName,
-//            Path jarFilePath, Path dataFolderPath, Path taskFilePath,
-//            Path folderPath, String remoteCommand
-//    ) throws IOException {
-//        this.taskSize = taskSize;
-//
-//        Job job = new Job(jobName, null);
-//        Path filePath = Paths.get(String.format(JOB_NAME_PATTERN, folderPath, jobName));
-//        Path filePath = Paths.get(String.format(DATA_NAME_PATTERN, folderPath, jobName));
-//
-//        writeFile(filePath, job.toString(), "UTF-8");
-//        taskIterator(routeTask -> {
-//            try {
-//                Files.write(
-//                        filePath,
-//                        new JobTask(
-//                                jarFilePath,
-//                                DATA_FILE_NAME + FILE_EXTENSION,
-//                                TASK_FILE_NAME + routeTask.getTaskIndex() + FILE_EXTENSION,
-//                                TASK_RESULT_NAME + routeTask.getTaskIndex() + FILE_EXTENSION,
-//                                remoteCommand
-//                        ).toString().getBytes(),
-//                        StandardOpenOption.APPEND
-//                );
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//
-//        return filePath;
-//    }
-
-
-    @Override
-    public Route getFinalResult(List<TaskResult> taskResults) {
-        this.minRoute = initMinRoute();
-        for (TaskResult taskResult : taskResults) {
-            minRouteFinder(taskResult.getMinRoute());
-        }
-        return this.minRoute;
     }
 
     @Override
@@ -152,7 +107,7 @@ public class RouteBuilderBase implements RouteBuilder {
     }
 
 
-    private void taskIterator(Consumer<RouteTask> task) {
+    private void taskIterator(TaskIterator taskIterator) throws IOException {
 
         BigInteger routesCount = inverseFactorial(this.adjMatrix.length, this.routeLength);
         BigInteger taskCount = routesCount.divide(this.taskSize);
@@ -164,7 +119,7 @@ public class RouteBuilderBase implements RouteBuilder {
                     .taskSize(taskSize)
                     .build();
 
-            task.accept(routeTask);
+            taskIterator.onNextTask(routeTask);
         }
 
         // остаток при нечётном количестве подзадач
@@ -177,7 +132,7 @@ public class RouteBuilderBase implements RouteBuilder {
                     .iterationCount(remainder)
                     .build();
 
-            task.accept(routeTask);
+            taskIterator.onNextTask(routeTask);
         }
     }
 
@@ -202,6 +157,11 @@ public class RouteBuilderBase implements RouteBuilder {
         this.adjMatrix = adjMatrix;
         this.routeLength = routeLength;
         validateData();
+    }
+
+
+    private interface TaskIterator {
+        void onNextTask(RouteTask routeTask) throws IOException;
     }
 
 }

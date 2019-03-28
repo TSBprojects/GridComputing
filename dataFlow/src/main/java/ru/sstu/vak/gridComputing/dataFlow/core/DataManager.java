@@ -14,9 +14,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static java.math.BigInteger.ONE;
+import static java.math.BigInteger.ZERO;
 
 public class DataManager {
 
@@ -31,6 +35,11 @@ public class DataManager {
 
     private static String SEPARATOR;
     private static String TASK_RESULT_NAME_PATTERN;
+
+    public interface ResultIterator {
+        void onNextResult(Path resultPath) throws IOException;
+    }
+
 
     static {
         if (System.getProperty("os.name").contains("Windows")) {
@@ -175,6 +184,7 @@ public class DataManager {
         return new TaskResult(new Route(nodesList, weight), taskIndex);
     }
 
+    @Deprecated
     public static List<TaskResult> readTaskResultFiles(Path folderPath) throws IOException {
 
         List<TaskResult> taskResults = new ArrayList<>();
@@ -203,7 +213,6 @@ public class DataManager {
 
         return taskResults;
     }
-
 
     public static Path writeDataFile(RouteData routeData, Path folderPath) throws IOException {
 
@@ -242,6 +251,15 @@ public class DataManager {
     }
 
 
+    public static void resultIterator(BigInteger taskCount, Path folderPath, ResultIterator iterator) throws IOException {
+        for (BigInteger i = ZERO; i.compareTo(taskCount) < 0; i = i.add(ONE)) {
+            Path resultFile = Paths.get(String.format(TASK_RESULT_NAME_PATTERN, folderPath, i));
+            if (resultFile.toFile().exists()) {
+                iterator.onNextResult(resultFile);
+            }
+        }
+    }
+
     public static void writeFile(Path path, String data, String charset) throws IOException {
         Files.deleteIfExists(path);
         Files.createFile(path);
@@ -252,12 +270,13 @@ public class DataManager {
         );
     }
 
-
+    @Deprecated
     private static boolean isRightFile(Path path, String pattern) {
         String fileName = path.getFileName().toString().toLowerCase();
         Pattern p = Pattern.compile(pattern.toLowerCase());
         Matcher m = p.matcher(fileName);
         return m.find() && fileName.endsWith(FILE_EXTENSION);
     }
+
 
 }
