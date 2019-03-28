@@ -519,7 +519,6 @@ public class MainController implements Initializable {
             public void onOutputLineRead(String outputLine) {
                 log.info(outputLine);
                 Platform.runLater(() -> {
-                    System.out.println(consoleTextArea.getText());
                     String[] consoleLines = consoleTextArea.getText().split("\n");
                     if (consoleLines[consoleLines.length - 1].contains("Command executed....")) {
                         consoleLines[consoleLines.length - 1] = outputLine;

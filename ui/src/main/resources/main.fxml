@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="482.0" prefWidth="724.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="795.0" style="-fx-background-color: #2e3348;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sstu.vak.gridComputing.ui.gui.MainController">
    <children>
       <TabPane layoutY="99.0" prefHeight="439.0" prefWidth="830.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
         <tabs>
@@ -106,7 +106,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="peerDescPathField" layoutX="213.0" layoutY="63.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="387.0" promptText="/home/user/setPeer.gdf" text="/home/anton/mygrid/setPeer.gdf">
+                                          <TextField fx:id="peerDescPathField" layoutX="213.0" layoutY="63.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="387.0" promptText="/home/user/setPeer.gdf">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
@@ -116,7 +116,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="brokerPathField" layoutX="213.0" layoutY="25.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="387.0" promptText="/home/user/broker" text="/home/anton/mygrid/bin/mygrid">
+                                          <TextField fx:id="brokerPathField" layoutX="213.0" layoutY="25.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="387.0" promptText="/home/user/broker">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
@@ -144,7 +144,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="jarFilePathField" layoutX="179.0" layoutY="64.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="412.0" promptText="C:\Programs\program.jar" text="/home/anton/GridСomputing/test/computeNode-1.0.jar">
+                                          <TextField fx:id="jarFilePathField" layoutX="179.0" layoutY="64.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="412.0" promptText="C:\Programs\program.jar">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
@@ -162,7 +162,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="jobNameField" layoutX="179.0" layoutY="26.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="MyJob" text="sd">
+                                          <TextField fx:id="jobNameField" layoutX="179.0" layoutY="26.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="MyJob">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
@@ -176,7 +176,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="taskSizeField" layoutX="181.0" layoutY="162.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="300" text="300">
+                                          <TextField fx:id="taskSizeField" layoutX="181.0" layoutY="162.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" prefWidth="487.0" promptText="300">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
@@ -194,7 +194,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="genDataFileToField" layoutX="224.0" layoutY="26.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Data\" text="/home/anton/GridСomputing">
+                                          <TextField fx:id="genDataFileToField" layoutX="224.0" layoutY="26.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Data\">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
@@ -208,7 +208,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="genTasksFilesToField" layoutX="224.0" layoutY="64.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Tasks\" text="/home/anton/GridСomputing">
+                                          <TextField fx:id="genTasksFilesToField" layoutX="224.0" layoutY="64.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Tasks\">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
@@ -222,7 +222,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="genJobFileToField" layoutX="224.0" layoutY="103.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Jobs\" text="/home/anton/GridСomputing/test">
+                                          <TextField fx:id="genJobFileToField" layoutX="224.0" layoutY="103.0" maxHeight="27.0" maxWidth="200.0" minHeight="27.0" minWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="C:\Jobs\">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
@@ -288,7 +288,7 @@
                                                 <Font name="Consolas" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="checkResultTimeoutField" layoutX="364.0" layoutY="28.0" minHeight="27.0" prefHeight="27.0" prefWidth="71.0" promptText="1000" text="1000" AnchorPane.leftAnchor="364.0" AnchorPane.topAnchor="28.0">
+                                          <TextField fx:id="checkResultTimeoutField" layoutX="364.0" layoutY="28.0" minHeight="27.0" prefHeight="27.0" prefWidth="71.0" promptText="1000" AnchorPane.leftAnchor="364.0" AnchorPane.topAnchor="28.0">
                                              <font>
                                                 <Font name="Consolas" size="14.0" />
                                              </font></TextField>
@@ -319,11 +319,6 @@
             <Font name="Consolas" size="12.0" />
          </font></TextField>
       <Button fx:id="startButton" layoutX="681.0" layoutY="36.0" minHeight="27.0" minWidth="102.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" style="-fx-background-color: F39C63;" text="Start" textFill="WHITE" AnchorPane.rightAnchor="25.0">
-         <font>
-            <Font name="Kristen ITC" size="12.0" />
-         </font>
-      </Button>
-      <Button fx:id="stopButton" layoutX="681.0" layoutY="36.0" minHeight="27.0" minWidth="102.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" style="-fx-background-color: red;" text="Stop" textFill="WHITE" visible="false" AnchorPane.rightAnchor="25.0">
          <font>
             <Font name="Kristen ITC" size="12.0" />
          </font>
