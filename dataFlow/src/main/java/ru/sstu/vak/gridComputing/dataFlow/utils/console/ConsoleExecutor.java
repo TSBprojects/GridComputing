@@ -17,31 +17,20 @@ public class ConsoleExecutor {
     private ConsoleExecutor() {
     }
 
+    public interface Callback {
+        void onOutputLineRead(String outputLine);
+
+        void onCommandComplete();
+
+        void onException(Exception e);
+    }
+
     public static void execute(String command, Callback callback) throws IOException {
         if (System.getProperty("os.name").contains("Windows")) {
             core(Runtime.getRuntime().exec("cmd /c " + command), callback);
         } else {
             core(Runtime.getRuntime().exec(command), callback);
         }
-    }
-
-    public static void sudoExecute(String command, String password, Callback callback) throws IOException {
-        String[] sudoCommand = new String[]{"bash", "-c", "echo " + password + "| sudo -S " + command};
-
-        core(Runtime.getRuntime().exec(sudoCommand), callback);
-    }
-
-    public static String[] parseCommand(String command) {
-        String[] commands = new String[]{command.trim()};
-        if (command.contains(";")) {
-
-            List<String> commandList = Arrays.stream(command.trim().split(";"))
-                    .map(String::trim)
-                    .collect(Collectors.toList());
-
-            return commandList.toArray(new String[commandList.size()]);
-        }
-        return commands;
     }
 
 
@@ -82,11 +71,26 @@ public class ConsoleExecutor {
         executorService.shutdown();
     }
 
-    public interface Callback {
-        void onOutputLineRead(String outputLine);
 
-        void onCommandComplete();
+    @Deprecated
+    public static void sudoExecute(String command, String password, Callback callback) throws IOException {
+        String[] sudoCommand = new String[]{"bash", "-c", "echo " + password + "| sudo -S " + command};
 
-        void onException(Exception e);
+        core(Runtime.getRuntime().exec(sudoCommand), callback);
     }
+
+    @Deprecated
+    public static String[] parseCommand(String command) {
+        String[] commands = new String[]{command.trim()};
+        if (command.contains(";")) {
+
+            List<String> commandList = Arrays.stream(command.trim().split(";"))
+                    .map(String::trim)
+                    .collect(Collectors.toList());
+
+            return commandList.toArray(new String[commandList.size()]);
+        }
+        return commands;
+    }
+
 }

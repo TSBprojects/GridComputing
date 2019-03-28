@@ -356,7 +356,7 @@ public class MainController implements Initializable {
                     logHelper.printInfoMessage("Starting computing...");
                     initTasksView();
                     startToggle();
-                    resetProgressBar();
+                    resetTaskResultPane();
 
                     initInputValues();
 
@@ -376,52 +376,12 @@ public class MainController implements Initializable {
             stopButton.setOnAction(event1 -> {
 
                 startToggle();
-                resetProgressBar();
+                resetTaskResultPane();
                 logHelper.printInfoMessage("Stop listening to the result folder.");
 
             });
         });
     }
-
-
-//    public static void showError(String message) {
-//        Platform.runLater(() -> {
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Ошибка");
-//            alert.setHeaderText(null);
-//            alert.setContentText(message);
-//            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-//            stage.getIcons().add(new Image("/main.png")); // To add an icon
-//            alert.showAndWait();
-//        });
-//    }
-//
-//    public static void showMessage(String message, String title) {
-//        Platform.runLater(() -> {
-//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//            alert.setTitle(title);
-//            alert.setHeaderText(null);
-//            alert.setContentText(message);
-//            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-//            stage.getIcons().add(new Image("/main.png")); // To add an icon
-//            alert.showAndWait();
-//        });
-//    }
-//
-//    private void printInfoMessage(String mess) {
-//        log.info(mess);
-//        printMessage(mess);
-//    }
-//
-//    private void printErrorMessage(String mess, Throwable e) {
-//        log.error(mess, e);
-//        printMessage("- ERROR - " + mess);
-//    }
-//
-//    private void printMessage(String mess) {
-//        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-//        Platform.runLater(() -> consoleTextArea.appendText("[" + dateFormat.format(new Date()) + "] - " + mess + "\n"));
-//    }
 
 
     private File selectFile(String title, String extDesc, String... extensions) {
@@ -594,7 +554,6 @@ public class MainController implements Initializable {
                                 );
                                 Platform.runLater(() -> {
                                     taskResultView.addTask(taskResult);
-
                                 });
                             }
                     );
@@ -622,40 +581,6 @@ public class MainController implements Initializable {
 
     }
 
-//
-//    private void execCommand(String c) throws IOException {
-//
-//        showCommProgressBar();
-//        ConsoleExecutor.execute(c, new ConsoleExecutor.Callback() {
-//            @Override
-//            public void onOutputLineRead(String outputLine) {
-//                Platform.runLater(() -> {
-//                    String[] consoleLines = consoleTextArea.getText().split("\n");
-//                    consoleLines[consoleLines.length-1] = outputLine;
-//                    consoleTextArea.setText(Arrays.stream(consoleLines).collect(Collectors.joining("\n"))+"\n");
-//                });
-//
-////                    logHelper.printInfoMessage(outputLine);
-//            }
-//
-//            @Override
-//            public void onCommandComplete() {
-//                Platform.runLater(() -> {
-//                    String[] consoleLines = consoleTextArea.getText().split("\n");
-//                    String[] completeConsLines = Arrays.copyOf(consoleLines,consoleLines.length-1);
-//                    consoleTextArea.setText(Arrays.stream(completeConsLines).collect(Collectors.joining("\n"))+"\n");
-//                });
-//                hideCommProgressBar();
-//            }
-//
-//            @Override
-//            public void onException(Exception e) {
-//                logHelper.processException(e);
-//                hideCommProgressBar();
-//            }
-//        });
-//    }
-
     private void setupResultWaiter() {
 
         taskResultWaiter = new TaskResultWaiter(
@@ -667,7 +592,6 @@ public class MainController implements Initializable {
         taskResultWaiter.start(new TaskResultWaiter.Callback() {
             @Override
             public void onTimeoutTick(BigInteger resultsCount) {
-                logHelper.printInfoMessage("Found loading result file.");
                 Platform.runLater(() -> {
                     setProgressBar(
                             resultsCount.doubleValue() / tasksCount.doubleValue(),
@@ -679,7 +603,6 @@ public class MainController implements Initializable {
             @Override
             public void onAllResultsExist() {
                 Platform.runLater(() -> {
-                    startToggle();
                     setProgressBar(1, String.format("Tasks %1$s/%1$s", tasksCount));
                 });
             }
@@ -691,50 +614,6 @@ public class MainController implements Initializable {
         }, Integer.parseInt(checkResultTimeoutField.getText()));
     }
 
-
-//    new TaskResultWaiter.Callback() {
-//        @Override
-//        public boolean onTaskReceive(TaskResult taskResult) {
-//            boolean isDuplicate = taskResultView.contains(taskResult);
-//            if (isDuplicate) {
-//                logHelper.printInfoMessage("Found duplicate result file №" +
-//                        taskResult.getTaskIndex() + "!");
-//            }
-//            return !isDuplicate;
-//        }
-//
-//        @Override
-//        public void onTaskComplete(TaskResult taskResult, BigInteger index) {
-//            logHelper.printInfoMessage("Found result file №" +
-//                    taskResult.getTaskIndex() + ". " +
-//                    taskResult.getMinRoute()
-//            );
-//            Platform.runLater(() -> {
-//                taskResultView.addTask(taskResult);
-//                setProgressBar(
-//                        index.doubleValue() / tasksCount.doubleValue(),
-//                        String.format("Tasks %1$s/%2$s", index, tasksCount)
-//                );
-//            });
-//        }
-//
-//        @Override
-//        public void onWorkComplete(Route minRoute) {
-//            String workDone = "Work done! Min route - " + minRoute;
-//            logHelper.printInfoMessage(workDone);
-//            logHelper.showMessage(workDone, "Results");
-//            Platform.runLater(() -> {
-//                startToggle();
-//                setProgressBar(1, String.format("Tasks %1$s/%1$s", tasksCount));
-//            });
-//        }
-//
-//        @Override
-//        public void onException(Exception e) {
-//            logHelper.processException(e);
-//        }
-//    }
-//
 
     private void startToggle() {
         if (startToggle) {
@@ -753,13 +632,14 @@ public class MainController implements Initializable {
         }
     }
 
-    private void setProgressBar(double progress, String info) {
+    private synchronized void setProgressBar(double progress, String info) {
         porgressBar.setProgress(progress);
         progressBarInfoField.setText(info);
     }
 
-    private void resetProgressBar() {
+    private void resetTaskResultPane() {
         setProgressBar(0, "Tasks 0/0");
+        this.taskResultsPane.getChildren().clear();
     }
 
 
@@ -771,35 +651,4 @@ public class MainController implements Initializable {
         };
     }
 
-//
-//    private void tryIt(Try callback, Finally finalExec) {
-//        try {
-//            callback.executableCode();
-//        } catch (Exception e) {
-//            processException(e);
-//        } finally {
-//            if (finalExec != null) {
-//                finalExec.executableCode();
-//            }
-//        }
-//    }
-//
-//    private void tryIt(Try callback) {
-//        tryIt(callback, null);
-//    }
-//
-//    private void processException(Exception e) {
-//        printErrorMessage(e.getMessage(), e);
-//        showError(e.getMessage() + " \nSee logs: 'logs.log'");
-//        startToggle = true;
-//        startToggle();
-//    }
-//
-//    private interface Try {
-//        void executableCode() throws Exception;
-//    }
-//
-//    private interface Finally {
-//        void executableCode();
-//    }
 }

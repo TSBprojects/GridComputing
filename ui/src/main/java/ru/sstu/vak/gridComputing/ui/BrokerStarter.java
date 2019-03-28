@@ -36,8 +36,6 @@ public class BrokerStarter {
 
     public void startAndRunJob(Path brokerPath, Path peerDescPath, Path jobPath) throws Exception {
 
-
-
         String start;
         if (System.getProperty("os.name").contains("Windows")) {
             start = "start";
