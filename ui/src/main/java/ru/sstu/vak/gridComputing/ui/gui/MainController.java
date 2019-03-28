@@ -157,9 +157,6 @@ public class MainController implements Initializable {
     private Button startButton;
 
     @FXML
-    private Button stopButton;
-
-    @FXML
     private ProgressBar infinityProgressBar;
 
 
@@ -372,14 +369,6 @@ public class MainController implements Initializable {
                     setupResultWaiter();
                 }
             });
-
-            stopButton.setOnAction(event1 -> {
-
-                startToggle();
-                resetTaskResultPane();
-                logHelper.printInfoMessage("Stop listening to the result folder.");
-
-            });
         });
     }
 
@@ -528,11 +517,17 @@ public class MainController implements Initializable {
         brokerStarter.setCommandOutputListener(new BrokerStarter.Callback() {
             @Override
             public void onOutputLineRead(String outputLine) {
+                log.info(outputLine);
                 Platform.runLater(() -> {
+                    System.out.println(consoleTextArea.getText());
                     String[] consoleLines = consoleTextArea.getText().split("\n");
-                    consoleLines[consoleLines.length - 1] = outputLine;
-                    consoleTextArea.setText(Arrays.stream(consoleLines)
-                            .collect(Collectors.joining("\n")) + "\n");
+                    if (consoleLines[consoleLines.length - 1].contains("Command executed....")) {
+                        consoleLines[consoleLines.length - 1] = outputLine;
+                        consoleTextArea.setText(Arrays.stream(consoleLines)
+                                .collect(Collectors.joining("\n")) + "\n");
+                    } else {
+                        consoleTextArea.appendText(outputLine);
+                    }
                 });
             }
 
@@ -616,20 +611,24 @@ public class MainController implements Initializable {
 
 
     private void startToggle() {
-        if (startToggle) {
-            startToggle = false;
-            startButton.setVisible(true);
-            stopButton.setVisible(false);
-            infinityProgressBar.setVisible(false);
-            if (taskResultWaiter != null) {
-                taskResultWaiter.stop();
+        Platform.runLater(() -> {
+            if (startToggle) {
+                startToggle = false;
+                startButton.setDisable(false);
+                startButton.setText("Start");
+                startButton.setStyle("-fx-background-color: F39C63");
+                infinityProgressBar.setVisible(false);
+                if (taskResultWaiter != null) {
+                    taskResultWaiter.stop();
+                }
+            } else {
+                startToggle = true;
+                startButton.setDisable(true);
+                startButton.setText("Wait...");
+                startButton.setStyle("-fx-background-color: red");
+                infinityProgressBar.setVisible(true);
             }
-        } else {
-            startToggle = true;
-            startButton.setVisible(false);
-            stopButton.setVisible(true);
-            infinityProgressBar.setVisible(true);
-        }
+        });
     }
 
     private synchronized void setProgressBar(double progress, String info) {
