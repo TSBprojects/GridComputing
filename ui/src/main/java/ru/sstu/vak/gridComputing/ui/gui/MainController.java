@@ -182,8 +182,6 @@ public class MainController implements Initializable {
 
         initLogHelper();
         initInputFields();
-        initMatrixViewResize();
-        initTasksViewResize();
 
         taskSizeField.textProperty().addListener(getFieldChecker(taskSizeField));
         checkResultTimeoutField.textProperty().addListener(getFieldChecker(checkResultTimeoutField));
@@ -414,6 +412,7 @@ public class MainController implements Initializable {
         AnchorPane.setTopAnchor(matrixView, 0d);
         this.adjMatrixPane.getChildren().clear();
         this.adjMatrixPane.getChildren().add(matrixView);
+        initMatrixViewResize();
     }
 
     private void initMatrixViewResize() {
@@ -429,6 +428,7 @@ public class MainController implements Initializable {
             AnchorPane.setTopAnchor(taskResultView, 0d);
             this.taskResultsPane.getChildren().clear();
             taskResultsPane.getChildren().add(taskResultView);
+            initTasksViewResize();
         });
     }
 
@@ -438,6 +438,7 @@ public class MainController implements Initializable {
 
     private void initTableResize(AnchorPane pane, TableView tableView) {
         Platform.runLater(() -> {
+
             pane.widthProperty().addListener((observable, oldValue, newValue) -> {
                 double newV = (double) newValue;
                 tableView.setPrefWidth(newV);
