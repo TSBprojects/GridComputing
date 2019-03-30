@@ -22,7 +22,8 @@ public class RouteTaskExecutorBase implements RouteTaskExecutor {
 
     private int routeLength;
     private int[][] adjMatrix;
-    private BigInteger[] factorials;
+    private NthPermutation nthPerm;
+
 
     private Consumer<Route> existRoutesListener;
     private Consumer<Route> allRoutesListener;
@@ -32,7 +33,7 @@ public class RouteTaskExecutorBase implements RouteTaskExecutor {
         RouteData routeData = readDataFile(dataFilePath);
         this.adjMatrix = routeData.getAdjMatrix();
         this.routeLength = routeData.getRouteLength();
-        this.factorials = createFactorialsArray(adjMatrix.length, routeLength);
+        this.nthPerm = new NthPermutation(adjMatrix.length, routeLength);
     }
 
     public RouteTaskExecutorBase(RouteData routeData) throws IOException {
@@ -46,7 +47,7 @@ public class RouteTaskExecutorBase implements RouteTaskExecutor {
 
         this.adjMatrix = adjMatrix;
         this.routeLength = routeLength;
-        this.factorials = createFactorialsArray(adjMatrix.length, routeLength);
+        this.nthPerm = new NthPermutation(adjMatrix.length, routeLength);
     }
 
 
@@ -73,7 +74,7 @@ public class RouteTaskExecutorBase implements RouteTaskExecutor {
         BigInteger start = routeTask.getRouteIndex();
         BigInteger end = start.add(routeTask.getIterationCount());
         for (BigInteger i = start; i.compareTo(end) < 0; i = i.add(ONE)) {
-            int[] path = nthPermutationSorted(
+            int[] path = nthPerm.getPermutation(
                     routeLength,
                     i
             );
@@ -88,80 +89,6 @@ public class RouteTaskExecutorBase implements RouteTaskExecutor {
         }
 
         return new TaskResult(minRoute, routeTask.getTaskIndex());
-    }
-
-
-    /**
-     * @param routeLength длина маршрута
-     * @param routeIndex  номер маршрута
-     * @return маршрут по номеру {@code routeIndex} длиной {@code routeLength }
-     */
-    private int[] nthPermutationSorted(int routeLength, BigInteger routeIndex) {
-
-        int[] permutation = new int[routeLength];
-
-        for (int i = 0; i < routeLength; i++) {
-            BigInteger part = factorials[i];
-            permutation[i] = routeIndex.divide(part).intValue();
-            routeIndex = routeIndex.mod(part);
-        }
-
-        for (int i = routeLength - 1; i > 0; i--) {
-            for (int j = i - 1; j >= 0; j--) {
-                if (permutation[j] <= permutation[i]) {
-                    permutation[i]++;
-                }
-            }
-        }
-
-        return permutation;
-    }
-
-    /**
-     * @param nodesCount  количество всех узлов
-     * @param routeLength длина маршрута
-     * @param routeIndex  номер маршрута
-     * @return маршрут по номеру {@code routeIndex} длиной {@code routeLength}
-     * из всех узлов {@code nodesCount}
-     * @deprecated вызов метода {@link RouteTaskExecutorBase#createFactorialsArray(int, int)}
-     * каждую итерацию сильно ухудшает производительность.
-     * Лучше использовать {@link RouteTaskExecutorBase#nthPermutationSorted(int, BigInteger)}
-     */
-    @Deprecated
-    private int[] nthPermutationSorted(int nodesCount, int routeLength, BigInteger routeIndex) {
-
-        int[] permutation = new int[routeLength];
-        BigInteger[] factorials = createFactorialsArray(nodesCount, routeLength);
-
-        for (int i = 0; i < routeLength; i++) {
-            BigInteger part = factorials[i];
-            permutation[i] = routeIndex.divide(part).intValue();
-            routeIndex = routeIndex.mod(part);
-        }
-
-        for (int i = routeLength - 1; i > 0; i--) {
-            for (int j = i - 1; j >= 0; j--) {
-                if (permutation[j] <= permutation[i]) {
-                    permutation[i]++;
-                }
-            }
-        }
-
-        return permutation;
-    }
-
-    private BigInteger[] createFactorialsArray(int nodesCount, int routeLength) {
-        BigInteger[] factorials = new BigInteger[routeLength];
-
-        int length = routeLength;
-        for (int i = 0; i < length - 1; i++) {
-            factorials[i] = inverseFactorial(nodesCount, routeLength).divide(valueOf(nodesCount));
-            nodesCount--;
-            routeLength--;
-        }
-        factorials[length - 1] = ONE;
-
-        return factorials;
     }
 
 
@@ -212,7 +139,6 @@ public class RouteTaskExecutorBase implements RouteTaskExecutor {
             existRoutesListener.accept(route.clone());
         }
     }
-
 
 }
 

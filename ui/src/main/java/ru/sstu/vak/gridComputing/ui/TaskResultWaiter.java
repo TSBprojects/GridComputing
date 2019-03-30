@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static ru.sstu.vak.gridComputing.dataFlow.core.DataManager.removeResultFiles;
 import static ru.sstu.vak.gridComputing.dataFlow.core.DataManager.resultIterator;
 
 public class TaskResultWaiter {
@@ -18,15 +19,6 @@ public class TaskResultWaiter {
     private BigInteger currentTaskCount;
     private Path taskResFolderPath;
 
-//    public interface Callback {
-//        boolean onTaskReceive(TaskResult taskResult);
-//
-//        void onTaskComplete(TaskResult taskResult, BigInteger index);
-//
-//        void onWorkComplete(Route minRoute);
-//
-//        void onException(Exception e);
-//    }
 
     public interface Callback {
         void onTimeoutTick(BigInteger resultsCount);
@@ -42,15 +34,14 @@ public class TaskResultWaiter {
         this.taskCount = taskCount;
     }
 
-    public void start(Callback callback, long delay) {
-
+    public void start(Callback callback, long delay) throws IOException {
+        removeResultFiles(taskResFolderPath);
         this.currentTaskCount = BigInteger.ZERO;
         this.timer = new Timer();
         this.timerTask = new TimerTask() {
             @Override
             public void run() {
                 try {
-
                     resultIterator(taskCount, taskResFolderPath, resultPath -> {
                         currentTaskCount = currentTaskCount.add(BigInteger.ONE);
                         if (currentTaskCount.equals(taskCount)) {

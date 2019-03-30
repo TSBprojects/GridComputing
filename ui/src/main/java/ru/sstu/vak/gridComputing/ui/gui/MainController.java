@@ -577,7 +577,7 @@ public class MainController implements Initializable {
 
     }
 
-    private void setupResultWaiter() {
+    private void setupResultWaiter() throws IOException {
 
         taskResultWaiter = new TaskResultWaiter(
                 genJobFileToField.getText(),

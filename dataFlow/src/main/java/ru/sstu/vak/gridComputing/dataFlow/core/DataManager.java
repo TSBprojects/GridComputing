@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -191,7 +190,7 @@ public class DataManager {
 
         List<Path> paths = Files.walk(folderPath)
                 .filter(path ->
-                        isRightFile(
+                        isCorrectFile(
                                 path,
                                 "(" + TASK_RESULT_NAME + "\\d+" + FILE_EXTENSION + ")"
                         )
@@ -251,6 +250,12 @@ public class DataManager {
     }
 
 
+    public static void removeResultFiles(Path folderPath) throws IOException {
+        Files.walk(folderPath)
+                .filter(path -> isCorrectFile(path, "(" + TASK_RESULT_NAME + ")"))
+                .forEach(path -> path.toFile().delete());
+    }
+
     public static void resultIterator(BigInteger taskCount, Path folderPath, ResultIterator iterator) throws IOException {
         for (BigInteger i = ZERO; i.compareTo(taskCount) < 0; i = i.add(ONE)) {
             Path resultFile = Paths.get(String.format(TASK_RESULT_NAME_PATTERN, folderPath, i));
@@ -270,13 +275,12 @@ public class DataManager {
         );
     }
 
-    @Deprecated
-    private static boolean isRightFile(Path path, String pattern) {
+
+    private static boolean isCorrectFile(Path path, String pattern) {
         String fileName = path.getFileName().toString().toLowerCase();
         Pattern p = Pattern.compile(pattern.toLowerCase());
         Matcher m = p.matcher(fileName);
         return m.find() && fileName.endsWith(FILE_EXTENSION);
     }
-
 
 }
