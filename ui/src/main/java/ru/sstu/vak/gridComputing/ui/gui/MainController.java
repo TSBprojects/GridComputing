@@ -183,6 +183,7 @@ public class MainController implements Initializable {
         initLogHelper();
         initInputFields();
         initMatrixViewResize();
+        initTasksViewResize();
 
         taskSizeField.textProperty().addListener(getFieldChecker(taskSizeField));
         checkResultTimeoutField.textProperty().addListener(getFieldChecker(checkResultTimeoutField));
@@ -416,20 +417,7 @@ public class MainController implements Initializable {
     }
 
     private void initMatrixViewResize() {
-        Platform.runLater(() -> {
-            adjMatrixPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-                double newV = (double) newValue;
-                matrixView.setPrefWidth(newV);
-                matrixView.setMinWidth(newV);
-                matrixView.setMinWidth(newV);
-            });
-            adjMatrixPane.heightProperty().addListener((observable, oldValue, newValue) -> {
-                double newV = (double) newValue;
-                matrixView.setPrefHeight(newV);
-                matrixView.setMinHeight(newV);
-                matrixView.setMaxHeight(newV);
-            });
-        });
+        initTableResize(adjMatrixPane, matrixView);
     }
 
     private void initTasksView() {
@@ -441,6 +429,27 @@ public class MainController implements Initializable {
             AnchorPane.setTopAnchor(taskResultView, 0d);
             this.taskResultsPane.getChildren().clear();
             taskResultsPane.getChildren().add(taskResultView);
+        });
+    }
+
+    private void initTasksViewResize() {
+        initTableResize(taskResultsPane, taskResultView);
+    }
+
+    private void initTableResize(AnchorPane pane, TableView tableView) {
+        Platform.runLater(() -> {
+            pane.widthProperty().addListener((observable, oldValue, newValue) -> {
+                double newV = (double) newValue;
+                tableView.setPrefWidth(newV);
+                tableView.setMinWidth(newV);
+                tableView.setMinWidth(newV);
+            });
+            pane.heightProperty().addListener((observable, oldValue, newValue) -> {
+                double newV = (double) newValue;
+                tableView.setPrefHeight(newV);
+                tableView.setMinHeight(newV);
+                tableView.setMaxHeight(newV);
+            });
         });
     }
 
