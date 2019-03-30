@@ -1,12 +1,15 @@
 package ru.sstu.vak.gridComputing.computeNode;
 
+import ru.sstu.vak.gridComputing.computeNode.core.NthPermutation;
 import ru.sstu.vak.gridComputing.computeNode.core.RouteTaskExecutor;
 import ru.sstu.vak.gridComputing.computeNode.core.RouteTaskExecutorBase;
 import ru.sstu.vak.gridComputing.dataFlow.entity.RouteTask;
 import ru.sstu.vak.gridComputing.dataFlow.entity.TaskResult;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import static ru.sstu.vak.gridComputing.dataFlow.core.DataManager.readTaskFile;
 import static ru.sstu.vak.gridComputing.dataFlow.core.DataManager.writeTaskResultFile;

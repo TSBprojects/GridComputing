@@ -11,6 +11,7 @@ import static ru.sstu.vak.gridComputing.dataFlow.utils.MathUtils.inverseFactoria
  */
 public class NthPermutation {
 
+    private int routeLength;
     private BigInteger[] factorials;
 
     /**
@@ -18,15 +19,15 @@ public class NthPermutation {
      * @param routeLength длина маршрута
      */
     public NthPermutation(int nodesCount, int routeLength) {
+        this.routeLength = routeLength;
         this.factorials =  createFactorialsArray(nodesCount, routeLength);
     }
 
     /**
-     * @param routeLength длина маршрута
      * @param routeIndex номер маршрута
      * @return перестановка по номеру {@code routeIndex} длиной {@code routeLength}
      */
-    public int[] getPermutation(int routeLength, BigInteger routeIndex) {
+    public int[] getPermutation(BigInteger routeIndex) {
 
         int[] permutation = new int[routeLength];
 
@@ -49,16 +50,15 @@ public class NthPermutation {
 
     /**
      * @param nodesCount количество всех узлов
-     * @param routeLength длина маршрута
      * @param routeIndex номер маршрута
      * @return перестановка по номеру {@code routeIndex} длиной {@code routeLength}
      * из всех узлов {@code nodesCount}
      * @deprecated вызов метода {@link NthPermutation#createFactorialsArray(int, int)}
      * каждую итерацию сильно ухудшает производительность.
-     * Лучше использовать {@link NthPermutation#getPermutation(int, BigInteger)}
+     * Лучше использовать {@link NthPermutation#getPermutation(BigInteger)}
      */
     @Deprecated
-    public int[] getPermutation(int nodesCount, int routeLength, BigInteger routeIndex) {
+    public int[] getPermutation(int nodesCount, BigInteger routeIndex) {
 
         int[] permutation = new int[routeLength];
         BigInteger[] factorials = createFactorialsArray(nodesCount, routeLength);

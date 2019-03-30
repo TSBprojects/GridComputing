@@ -13,14 +13,11 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import static java.math.BigInteger.ONE;
-import static java.math.BigInteger.valueOf;
 import static ru.sstu.vak.gridComputing.dataFlow.core.DataManager.readDataFile;
 import static ru.sstu.vak.gridComputing.dataFlow.core.DataManager.readTaskFile;
-import static ru.sstu.vak.gridComputing.dataFlow.utils.MathUtils.inverseFactorial;
 
 public class RouteTaskExecutorBase implements RouteTaskExecutor {
 
-    private int routeLength;
     private int[][] adjMatrix;
     private NthPermutation nthPerm;
 
@@ -32,8 +29,7 @@ public class RouteTaskExecutorBase implements RouteTaskExecutor {
     public RouteTaskExecutorBase(Path dataFilePath) throws IOException {
         RouteData routeData = readDataFile(dataFilePath);
         this.adjMatrix = routeData.getAdjMatrix();
-        this.routeLength = routeData.getRouteLength();
-        this.nthPerm = new NthPermutation(adjMatrix.length, routeLength);
+        this.nthPerm = new NthPermutation(adjMatrix.length, routeData.getRouteLength());
     }
 
     public RouteTaskExecutorBase(RouteData routeData) throws IOException {
@@ -46,7 +42,6 @@ public class RouteTaskExecutorBase implements RouteTaskExecutor {
         }
 
         this.adjMatrix = adjMatrix;
-        this.routeLength = routeLength;
         this.nthPerm = new NthPermutation(adjMatrix.length, routeLength);
     }
 
@@ -74,10 +69,7 @@ public class RouteTaskExecutorBase implements RouteTaskExecutor {
         BigInteger start = routeTask.getRouteIndex();
         BigInteger end = start.add(routeTask.getIterationCount());
         for (BigInteger i = start; i.compareTo(end) < 0; i = i.add(ONE)) {
-            int[] path = nthPerm.getPermutation(
-                    routeLength,
-                    i
-            );
+            int[] path = nthPerm.getPermutation(i);
 
             Route route = initRoute(path);
             if (route != null) {
